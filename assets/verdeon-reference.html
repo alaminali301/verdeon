@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verdeon — Carbon Intelligence Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --g950:#071a10;--g900:#0e3320;--g800:#1a5c38;--g700:#237848;--g600:#2d9459;
+    --g500:#3aad6b;--g400:#5ec48a;--g300:#8fd9a8;--g200:#bfedcf;--g100:#e4f8eb;--g50:#f2fdf5;
+    --sand100:#f5f0e8;--sand200:#e8dfce;--sand300:#d4c7b0;
+    --charcoal:#1c1c1e;--muted:#6b7a72;--white:#ffffff;
+    --font-d:'Playfair Display',Georgia,serif;
+    --font-b:'Instrument Sans',system-ui,sans-serif;
+    --r-sm:8px;--r-md:14px;--r-lg:24px;
+    --shadow-card:0 2px 20px rgba(14,51,32,.08),0 1px 4px rgba(14,51,32,.05);
+    --shadow-lift:0 8px 40px rgba(14,51,32,.14),0 2px 8px rgba(14,51,32,.07);
+  }
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--font-b);background:var(--white);color:var(--charcoal);line-height:1.6;overflow-x:hidden;}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 3rem;background:rgba(255,255,255,.88);backdrop-filter:blur(16px);border-bottom:1px solid rgba(45,148,89,.1);transition:box-shadow .3s;}
+  nav.scrolled{box-shadow:0 2px 20px rgba(14,51,32,.08);}
+  .nav-logo{display:flex;align-items:center;gap:.6rem;font-family:var(--font-d);font-size:1.5rem;font-weight:700;color:var(--g900);text-decoration:none;letter-spacing:-.02em;}
+  .nav-logo-mark{width:32px;height:32px;background:var(--g800);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+  .nav-links{display:flex;gap:2.2rem;list-style:none;}
+  .nav-links a{text-decoration:none;color:var(--g900);font-size:.9rem;font-weight:500;opacity:.75;transition:opacity .2s;}
+  .nav-links a:hover{opacity:1;}
+  .nav-cta{display:flex;align-items:center;gap:1rem;}
+  .btn{display:inline-flex;align-items:center;gap:.45rem;padding:.65rem 1.4rem;border-radius:100px;font-family:var(--font-b);font-size:.88rem;font-weight:500;cursor:pointer;text-decoration:none;transition:all .2s;border:none;}
+  .btn-outline{border:1.5px solid var(--g700);color:var(--g800);background:transparent;}
+  .btn-outline:hover{background:var(--g50);}
+  .btn-solid{background:var(--g800);color:var(--white);}
+  .btn-solid:hover{background:var(--g900);transform:translateY(-1px);box-shadow:var(--shadow-lift);}
+  .btn-lg{padding:.9rem 2rem;font-size:1rem;}
+  .btn-ghost{background:rgba(255,255,255,.08);color:white;border:1.5px solid rgba(255,255,255,.2);}
+  .btn-ghost:hover{background:rgba(255,255,255,.14);}
+  .btn-green{background:var(--g500);color:var(--g950);}
+  .btn-green:hover{background:var(--g400);transform:translateY(-1px);}
+
+  /* HERO */
+  #hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:4rem;padding:8rem 3rem 5rem;background:var(--g50);position:relative;overflow:hidden;}
+  .hero-bg{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(58,173,107,.12) 0%,transparent 70%);pointer-events:none;}
+  .hero-bg:nth-child(1){width:700px;height:700px;top:-200px;right:-150px;}
+  .hero-bg:nth-child(2){width:400px;height:400px;bottom:-100px;left:200px;}
+  .hero-eyebrow{display:inline-flex;align-items:center;gap:.5rem;background:var(--g100);color:var(--g800);padding:.35rem .85rem;border-radius:100px;font-size:.78rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.4rem;}
+  .hero-eyebrow span{width:6px;height:6px;background:var(--g500);border-radius:50%;display:inline-block;animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.85);}}
+  .hero-title{font-family:var(--font-d);font-size:clamp(2.6rem,4.5vw,3.8rem);font-weight:700;line-height:1.12;color:var(--g950);letter-spacing:-.03em;margin-bottom:1.4rem;}
+  .hero-title em{font-style:normal;color:var(--g700);}
+  .hero-desc{font-size:1.08rem;color:var(--muted);line-height:1.75;max-width:480px;margin-bottom:2.2rem;}
+  .hero-actions{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;}
+  .hero-proof{margin-top:3rem;display:flex;align-items:center;gap:1.2rem;}
+  .av-stack{display:flex;}
+  .av{width:34px;height:34px;border-radius:50%;border:2px solid white;margin-left:-10px;background:var(--g200);display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:600;color:var(--g800);}
+  .av:first-child{margin-left:0;}
+  .proof-text{font-size:.83rem;color:var(--muted);}
+  .proof-text strong{color:var(--charcoal);}
+
+  /* DASHBOARD CARD */
+  .hero-visual{position:relative;z-index:1;}
+  .dash-card{background:white;border-radius:var(--r-lg);box-shadow:var(--shadow-lift);overflow:hidden;border:1px solid rgba(45,148,89,.1);}
+  .dash-topbar{background:var(--g900);padding:1rem 1.4rem;display:flex;align-items:center;gap:.6rem;}
+  .dot{width:10px;height:10px;border-radius:50%;}
+  .dot-r{background:#ff5f57;}.dot-y{background:#febc2e;}.dot-g{background:#28c840;}
+  .dash-topbar-title{margin-left:auto;font-size:.75rem;color:rgba(255,255,255,.5);letter-spacing:.04em;}
+  .dash-body{padding:1.4rem;}
+  .dash-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.2rem;}
+  .dash-metric{background:var(--g50);border-radius:var(--r-sm);padding:.85rem;border:1px solid rgba(45,148,89,.12);}
+  .dash-metric .lbl{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.3rem;}
+  .dash-metric .val{font-size:1.15rem;font-weight:600;color:var(--g900);font-family:var(--font-d);}
+  .dash-metric .dlt{font-size:.68rem;margin-top:.15rem;}
+  .dlt-d{color:#22c55e;}.dlt-u{color:#ef4444;}
+  .chart-lbl{font-size:.72rem;color:var(--muted);margin-bottom:.5rem;font-weight:500;}
+  .mini-bars{display:flex;align-items:flex-end;gap:3px;height:64px;margin-bottom:.3rem;}
+  .mini-bars .mb{flex:1;border-radius:2px 2px 0 0;}
+  .mini-bars .mb.act{background:var(--g600)!important;}
+  .yr-row{display:flex;gap:3px;}
+  .yr-row span{flex:1;text-align:center;font-size:.52rem;color:var(--muted);}
+  .s-rows{margin-top:.9rem;}
+  .s-row{display:flex;align-items:center;gap:.7rem;padding:.45rem 0;border-top:1px solid var(--g50);font-size:.74rem;}
+  .s-dot{width:7px;height:7px;border-radius:2px;flex-shrink:0;}
+  .s-name{flex:1;color:var(--charcoal);}
+  .s-bw{width:70px;height:4px;background:var(--g100);border-radius:2px;}
+  .s-bf{height:100%;border-radius:2px;}
+  .s-val{font-weight:600;color:var(--g900);min-width:48px;text-align:right;}
+  .hero-badge{position:absolute;bottom:-16px;left:-28px;background:white;border-radius:var(--r-md);padding:.75rem 1rem;box-shadow:var(--shadow-lift);display:flex;align-items:center;gap:.7rem;font-size:.8rem;border:1px solid rgba(45,148,89,.12);animation:float 4s ease-in-out infinite;}
+  .hero-badge .icon{width:30px;height:30px;background:var(--g100);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+  .hero-badge strong{display:block;font-size:.8rem;color:var(--g900);}
+  .hero-badge span{color:var(--muted);font-size:.7rem;}
+  @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+
+  /* LOGOS */
+  #logos{padding:2.5rem 3rem;background:white;border-top:1px solid var(--sand200);border-bottom:1px solid var(--sand200);}
+  .logos-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:1.5rem;}
+  .logos-lbl{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);white-space:nowrap;flex-shrink:0;}
+  .logos-div{width:1px;height:24px;background:var(--sand300);flex-shrink:0;}
+  .logos-track{display:flex;gap:2.5rem;align-items:center;flex:1;}
+  .logo-item{font-family:var(--font-d);font-weight:600;font-size:.88rem;color:var(--sand300);white-space:nowrap;transition:color .3s;cursor:default;}
+  .logo-item:hover{color:var(--g400);}
+
+  /* SECTIONS */
+  section{padding:6rem 3rem;}
+  .si{max-width:1100px;margin:0 auto;}
+  .eyebrow{font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;color:var(--g600);font-weight:600;margin-bottom:.8rem;}
+  .sec-title{font-family:var(--font-d);font-size:clamp(2rem,3.5vw,2.8rem);font-weight:700;color:var(--g950);letter-spacing:-.025em;line-height:1.18;margin-bottom:1rem;}
+  .sec-desc{font-size:1.05rem;color:var(--muted);line-height:1.75;max-width:560px;}
+
+  /* HOW */
+  #how{background:var(--g50);}
+  .how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:3.5rem;}
+  .how-card{background:white;border-radius:var(--r-md);padding:2rem;border:1px solid rgba(45,148,89,.1);position:relative;transition:transform .25s,box-shadow .25s;}
+  .how-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lift);}
+  .how-num{font-family:var(--font-d);font-size:3.5rem;font-weight:700;color:var(--g100);line-height:1;position:absolute;top:1.2rem;right:1.6rem;}
+  .how-icon{width:48px;height:48px;background:var(--g100);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:1.2rem;font-size:1.4rem;}
+  .how-card h3{font-size:1.1rem;font-weight:600;color:var(--g900);margin-bottom:.6rem;}
+  .how-card p{font-size:.9rem;color:var(--muted);line-height:1.7;}
+
+  /* DATA EXPLORER */
+  #data{background:white;}
+  .data-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;margin-top:3rem;}
+  .trend-box{background:var(--g50);border-radius:var(--r-lg);padding:1.6rem;border:1px solid rgba(45,148,89,.1);}
+  .trend-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.2rem;}
+  .trend-lbl{font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;margin-bottom:.3rem;}
+  .trend-val{font-family:var(--font-d);font-size:1.9rem;font-weight:700;color:var(--g900);}
+  .trend-sub{font-size:.72rem;color:var(--muted);margin-top:.15rem;}
+  #trendCanvas{width:100%;height:150px;display:block;}
+  .yr-btns{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:1rem;}
+  .yr-btn{padding:.22rem .6rem;border-radius:100px;border:1px solid rgba(45,148,89,.2);background:white;font-size:.7rem;color:var(--g700);cursor:pointer;transition:all .2s;font-family:var(--font-b);}
+  .yr-btn:hover,.yr-btn.on{background:var(--g800);color:white;border-color:var(--g800);}
+  .sector-panel h3{font-size:1rem;font-weight:600;color:var(--g900);margin-bottom:1.2rem;}
+  .sector-panel h3 span{font-weight:400;color:var(--muted);font-size:.85rem;}
+  .sec-items{display:flex;flex-direction:column;gap:1rem;}
+  .sec-item .sit{display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:.3rem;}
+  .sec-item .sn{color:var(--charcoal);font-weight:500;}
+  .sec-item .sv{color:var(--muted);}
+  .sec-item .sb{height:6px;background:var(--g100);border-radius:3px;}
+  .sec-item .sf{height:100%;border-radius:3px;transition:width .5s ease;}
+
+  /* TOP FACILITIES */
+  #facilities{background:var(--g50);}
+  .fac-intro{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;margin-bottom:2.5rem;}
+  .fac-highlight{background:var(--g900);border-radius:var(--r-md);padding:1.6rem;color:white;}
+  .fac-hl-lbl{font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--g300);margin-bottom:.4rem;}
+  .fac-hl-name{font-family:var(--font-d);font-size:1.5rem;font-weight:700;color:white;}
+  .fac-hl-sub{font-size:.82rem;color:rgba(255,255,255,.5);margin-top:.25rem;}
+  .fac-hl-val{font-family:var(--font-d);font-size:2.2rem;font-weight:700;color:var(--g300);margin-top:.8rem;}
+  .fac-hl-unit{font-size:.72rem;color:rgba(255,255,255,.35);}
+  .fac-sel-row{display:flex;align-items:center;gap:.8rem;margin-bottom:1.2rem;}
+  .fac-sel-row label{font-size:.82rem;color:var(--muted);}
+  .fac-sel-row select{padding:.4rem .85rem;border-radius:100px;border:1.5px solid rgba(45,148,89,.25);background:white;color:var(--g900);font-family:var(--font-b);font-size:.82rem;cursor:pointer;}
+  .fac-table-wrap{border-radius:var(--r-md);overflow:hidden;box-shadow:var(--shadow-card);}
+  table.ft{width:100%;border-collapse:collapse;font-size:.88rem;}
+  table.ft th{text-align:left;padding:.7rem 1rem;background:var(--g900);color:rgba(255,255,255,.65);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;font-weight:600;}
+  table.ft th:last-child{text-align:right;}
+  table.ft td{padding:.7rem 1rem;border-bottom:1px solid var(--g100);background:white;}
+  table.ft tr:last-child td{border-bottom:none;}
+  table.ft tr:hover td{background:var(--g50);}
+  table.ft td:last-child{text-align:right;font-weight:600;color:var(--g800);}
+  .rank{display:inline-flex;width:22px;height:22px;border-radius:50%;background:var(--g100);color:var(--g800);font-size:.68rem;font-weight:700;align-items:center;justify-content:center;}
+  .rank.top3{background:var(--g800);color:white;}
+
+  /* STATES */
+  #states{background:white;}
+  .states-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.75rem;margin-top:2.5rem;}
+  .state-card{background:var(--g50);border-radius:var(--r-sm);padding:1rem .8rem;text-align:center;border:1px solid rgba(45,148,89,.1);transition:all .2s;cursor:default;}
+  .state-card:hover{background:var(--g800);}
+  .state-card:hover .st-ab,.state-card:hover .st-mt{color:white;}
+  .state-card:hover .st-rk{color:var(--g300);}
+  .st-ab{font-family:var(--font-d);font-size:1.4rem;font-weight:700;color:var(--g900);}
+  .st-mt{font-size:.88rem;font-weight:600;color:var(--g700);margin:.2rem 0;}
+  .st-rk{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;}
+
+  /* STATS */
+  #stats{background:var(--g900);padding:5rem 3rem;}
+  .stats-inner{max-width:1100px;margin:0 auto;}
+  .stats-h{font-family:var(--font-d);font-size:clamp(1.8rem,3vw,2.4rem);font-weight:700;letter-spacing:-.025em;margin-bottom:3rem;text-align:center;color:var(--g100);}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;}
+  .stat-card{text-align:center;padding:2rem 1rem;background:rgba(255,255,255,.05);border-radius:var(--r-md);border:1px solid rgba(255,255,255,.08);transition:background .2s;}
+  .stat-card:hover{background:rgba(255,255,255,.09);}
+  .stat-num{font-family:var(--font-d);font-size:2.8rem;font-weight:700;color:var(--g300);line-height:1;margin-bottom:.4rem;}
+  .stat-lbl{font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.4;}
+  .stat-src{font-size:.68rem;color:rgba(255,255,255,.22);margin-top:.5rem;}
+
+  /* PRICING */
+  #pricing{background:var(--sand100);}
+  .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3.5rem;align-items:start;}
+  .price-card{background:white;border-radius:var(--r-lg);padding:2.2rem;border:1.5px solid rgba(45,148,89,.12);transition:transform .25s,box-shadow .25s;position:relative;}
+  .price-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lift);}
+  .price-card.feat{background:var(--g900);color:white;border-color:var(--g700);}
+  .p-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--g500);color:white;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;padding:.25rem .85rem;border-radius:100px;}
+  .p-tier{font-size:.78rem;text-transform:uppercase;letter-spacing:.07em;font-weight:600;margin-bottom:.8rem;}
+  .price-card:not(.feat) .p-tier{color:var(--g700);}
+  .price-card.feat .p-tier{color:var(--g300);}
+  .p-amt{font-family:var(--font-d);font-size:2.6rem;font-weight:700;line-height:1;margin-bottom:.2rem;}
+  .price-card:not(.feat) .p-amt{color:var(--g950);}
+  .price-card.feat .p-amt{color:white;}
+  .p-per{font-size:.82rem;margin-bottom:1.8rem;}
+  .price-card:not(.feat) .p-per{color:var(--muted);}
+  .price-card.feat .p-per{color:rgba(255,255,255,.5);}
+  .p-feats{list-style:none;display:flex;flex-direction:column;gap:.7rem;margin-bottom:2rem;}
+  .p-feats li{display:flex;gap:.7rem;font-size:.88rem;}
+  .price-card:not(.feat) .p-feats li{color:var(--charcoal);}
+  .price-card.feat .p-feats li{color:rgba(255,255,255,.85);}
+  .price-card:not(.feat) .p-feats .ck{color:var(--g600);}
+  .price-card.feat .p-feats .ck{color:var(--g300);}
+  .p-cta{width:100%;padding:.85rem;border-radius:100px;font-family:var(--font-b);font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s;border:none;}
+  .price-card:not(.feat) .p-cta{background:var(--g100);color:var(--g900);}
+  .price-card:not(.feat) .p-cta:hover{background:var(--g200);}
+  .price-card.feat .p-cta{background:var(--g400);color:var(--g950);}
+  .price-card.feat .p-cta:hover{background:var(--g300);}
+
+  /* TESTIMONIALS */
+  #testi{background:white;}
+  .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem;}
+  .t-card{background:var(--g50);border-radius:var(--r-md);padding:1.8rem;border:1px solid rgba(45,148,89,.1);display:flex;flex-direction:column;gap:1.2rem;}
+  .t-stars{color:var(--g600);letter-spacing:2px;}
+  .t-q{font-size:.92rem;line-height:1.75;color:var(--charcoal);flex:1;}
+  .t-q::before{content:'\201C';}.t-q::after{content:'\201D';}
+  .t-auth{display:flex;align-items:center;gap:.8rem;}
+  .t-av{width:38px;height:38px;border-radius:50%;background:var(--g200);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:var(--g800);flex-shrink:0;}
+  .t-name{font-size:.85rem;font-weight:600;color:var(--g900);}
+  .t-role{font-size:.75rem;color:var(--muted);}
+
+  /* FAQ */
+  #faq{background:var(--g50);}
+  .faq-layout{display:grid;grid-template-columns:1fr 1.5fr;gap:5rem;align-items:start;margin-top:3rem;}
+  .faq-list{display:flex;flex-direction:column;gap:.55rem;}
+  .faq-item{background:white;border-radius:var(--r-sm);border:1px solid rgba(45,148,89,.1);overflow:hidden;}
+  .faq-q{display:flex;justify-content:space-between;align-items:center;padding:1.1rem 1.3rem;cursor:pointer;font-size:.9rem;font-weight:500;color:var(--g900);user-select:none;}
+  .faq-q .chev{transition:transform .25s;font-size:.72rem;color:var(--g600);}
+  .faq-item.open .chev{transform:rotate(180deg);}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;font-size:.86rem;color:var(--muted);line-height:1.75;}
+  .faq-item.open .faq-a{max-height:220px;padding:0 1.3rem 1.1rem;}
+
+  /* CTA */
+  #cta{background:var(--g950);padding:7rem 3rem;text-align:center;position:relative;overflow:hidden;}
+  #cta::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(58,173,107,.18) 0%,transparent 70%);}
+  .cta-inner{max-width:660px;margin:0 auto;position:relative;z-index:1;}
+  .cta-leaf{font-size:3rem;margin-bottom:1.5rem;display:block;animation:float 5s ease-in-out infinite;}
+  .cta-title{font-family:var(--font-d);font-size:clamp(2rem,4vw,3rem);font-weight:700;color:white;margin-bottom:1.2rem;line-height:1.15;letter-spacing:-.025em;}
+  .cta-title em{font-style:normal;color:var(--g300);}
+  .cta-desc{color:rgba(255,255,255,.55);font-size:1rem;margin-bottom:2.5rem;line-height:1.7;}
+  .cta-acts{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;}
+
+  /* FOOTER */
+  footer{background:var(--g950);color:rgba(255,255,255,.4);padding:3rem;border-top:1px solid rgba(255,255,255,.06);}
+  .foot-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;}
+  .foot-brand .nav-logo{color:var(--g300);margin-bottom:.8rem;display:flex;}
+  .foot-brand p{font-size:.83rem;line-height:1.7;max-width:240px;}
+  .foot-col h5{font-size:.73rem;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.55);margin-bottom:1rem;font-weight:600;}
+  .foot-col ul{list-style:none;display:flex;flex-direction:column;gap:.5rem;}
+  .foot-col a{font-size:.84rem;color:rgba(255,255,255,.38);text-decoration:none;transition:color .2s;}
+  .foot-col a:hover{color:var(--g300);}
+  .foot-bottom{max-width:1100px;margin:2.5rem auto 0;padding-top:2rem;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;font-size:.76rem;}
+  .epa-note{background:rgba(58,173,107,.08);border:1px solid rgba(58,173,107,.15);border-radius:var(--r-sm);padding:.45rem .85rem;font-size:.72rem;color:var(--g400);margin-top:1rem;display:inline-block;}
+
+  /* UTILS */
+  .fade-up{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
+  .fade-up.visible{opacity:1;transform:translateY(0);}
+
+  @media(max-width:900px){
+    nav{padding:1rem 1.5rem;}
+    .nav-links{display:none;}
+    #hero{grid-template-columns:1fr;padding:7rem 1.5rem 4rem;}
+    .hero-visual{display:none;}
+    .how-grid,.price-grid,.testi-grid{grid-template-columns:1fr;}
+    .stats-grid{grid-template-columns:repeat(2,1fr);}
+    .data-grid,.fac-intro,.faq-layout{grid-template-columns:1fr;gap:2rem;}
+    .states-grid{grid-template-columns:repeat(3,1fr);}
+    .foot-inner{grid-template-columns:1fr 1fr;gap:2rem;}
+    section{padding:4rem 1.5rem;}
+    #logos{padding:2rem 1.5rem;}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-mark">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2C9 2 4 5.5 4 10.5C4 13.5 6.2 16 9 16C11.8 16 14 13.5 14 10.5C14 5.5 9 2 9 2Z" fill="#5ec48a"/><path d="M9 7L9 14" stroke="white" stroke-width="1.5" stroke-linecap="round"/><path d="M6.5 10L9 7.5L11.5 10" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    Verdeon
+  </a>
+  <ul class="nav-links">
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#data">Data explorer</a></li>
+    <li><a href="#facilities">Top emitters</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="#" class="btn btn-outline">Sign in</a>
+    <a href="#cta" class="btn btn-solid">Get started</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div><div class="hero-bg"></div>
+  <div class="fade-up">
+    <div class="hero-eyebrow"><span></span> EPA GHGRP · 2010–2023 · Real data</div>
+    <h1 class="hero-title">Carbon intelligence<br>that <em>drives action</em></h1>
+    <p class="hero-desc">Verdeon turns 14 years of EPA Greenhouse Gas Reporting Program data into clear insights — from 3,197 Mt in 2010 down to 2,383 Mt in 2023. Real numbers. Real trends. Real strategies.</p>
+    <div class="hero-actions">
+      <a href="#cta" class="btn btn-solid btn-lg">Start for free</a>
+      <a href="#data" class="btn btn-outline btn-lg">Explore the data ↓</a>
+    </div>
+    <div class="hero-proof">
+      <div class="av-stack"><div class="av">MR</div><div class="av">JK</div><div class="av">AL</div><div class="av">TS</div></div>
+      <p class="proof-text"><strong>500+ sustainability teams</strong><br>track emissions with Verdeon</p>
+    </div>
+  </div>
+  <div class="hero-visual fade-up" style="transition-delay:.15s">
+    <div class="dash-card" style="position:relative">
+      <div class="dash-topbar">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <span class="dash-topbar-title">Verdeon · EPA GHGRP · 2023</span>
+      </div>
+      <div class="dash-body">
+        <div class="dash-metrics">
+          <div class="dash-metric"><div class="lbl">Total Emissions</div><div class="val">2,383 Mt</div><div class="dlt dlt-d">▼ 25.5% since 2010</div></div>
+          <div class="dash-metric"><div class="lbl">Facilities</div><div class="val">6,455</div><div class="dlt dlt-d">▼ from 7,277 peak</div></div>
+          <div class="dash-metric"><div class="lbl">Power Plants</div><div class="val">1,404 Mt</div><div class="dlt dlt-d">▼ 38.8% since 2010</div></div>
+        </div>
+        <div class="chart-lbl">US emissions 2010–2023 (Mt CO₂e) — EPA GHGRP</div>
+        <div class="mini-bars" id="heroBars"></div>
+        <div class="yr-row" id="heroYrs"></div>
+        <div class="s-rows">
+          <div class="s-row"><div class="s-dot" style="background:#1a5c38"></div><div class="s-name">Power Plants</div><div class="s-bw"><div class="s-bf" style="width:88%;background:#1a5c38"></div></div><div class="s-val">1,404 Mt</div></div>
+          <div class="s-row"><div class="s-dot" style="background:#3aad6b"></div><div class="s-name">Chemicals</div><div class="s-bw"><div class="s-bf" style="width:48%;background:#3aad6b"></div></div><div class="s-val">113 Mt</div></div>
+          <div class="s-row"><div class="s-dot" style="background:#5ec48a"></div><div class="s-name">Petrol. & Gas</div><div class="s-bw"><div class="s-bf" style="width:46%;background:#5ec48a"></div></div><div class="s-val">109 Mt</div></div>
+          <div class="s-row"><div class="s-dot" style="background:#8fd9a8"></div><div class="s-name">Minerals</div><div class="s-bw"><div class="s-bf" style="width:45%;background:#8fd9a8"></div></div><div class="s-val">107 Mt</div></div>
+        </div>
+      </div>
+      <div class="hero-badge"><div class="icon">📉</div><div><strong>−814 Mt since 2010</strong><span>Verified EPA GHGRP data</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- LOGOS -->
+<div id="logos">
+  <div class="logos-inner">
+    <span class="logos-lbl">Real data from</span>
+    <div class="logos-div"></div>
+    <div class="logos-track">
+      <span class="logo-item">EPA GHGRP</span>
+      <span class="logo-item">Direct Emitters 2010–2023</span>
+      <span class="logo-item">FLIGHT Tool</span>
+      <span class="logo-item">Envirofacts</span>
+      <span class="logo-item">6,455 Facilities</span>
+      <span class="logo-item">8 Sectors</span>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="si">
+    <p class="eyebrow fade-up">How it works</p>
+    <h2 class="sec-title fade-up">From raw EPA files<br>to clear action</h2>
+    <div class="how-grid">
+      <div class="how-card fade-up"><div class="how-num">01</div><div class="how-icon">📂</div><h3>Upload EPA GHGRP files</h3><p>Drop in any EPA GHGRP Excel file — annual data summaries, emissions by unit, or subpart datasets. Verdeon auto-detects the format and parses it instantly across all reporting years.</p></div>
+      <div class="how-card fade-up" style="transition-delay:.1s"><div class="how-num">02</div><div class="how-icon">📊</div><h3>Explore the dashboards</h3><p>See emissions by sector, company, state, and year — all interactive. Filter to specific facilities, compare year-over-year, and spot the trends hidden in 14 years of data.</p></div>
+      <div class="how-card fade-up" style="transition-delay:.2s"><div class="how-num">03</div><div class="how-icon">💡</div><h3>Act on the insights</h3><p>Verdeon's recommendation engine identifies your highest-impact reduction opportunities and surfaces concrete, prioritised strategies ranked by CO₂e savings potential.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- DATA EXPLORER -->
+<section id="data">
+  <div class="si">
+    <p class="eyebrow fade-up">Data explorer</p>
+    <h2 class="sec-title fade-up">14 years of real EPA data</h2>
+    <p class="sec-desc fade-up">Every number below comes directly from the EPA GHGRP files — 2010 through 2023. Click any year to explore.</p>
+    <div class="data-grid">
+      <div class="trend-box fade-up">
+        <div class="trend-header">
+          <div>
+            <div class="trend-lbl">Total US reported emissions</div>
+            <div class="trend-val" id="trendVal">2,383 Mt</div>
+            <div class="trend-sub" id="trendSub">CO₂e · 2023 · 6,455 facilities</div>
+          </div>
+        </div>
+        <canvas id="trendCanvas"></canvas>
+        <div class="yr-btns" id="yrBtns"></div>
+      </div>
+      <div class="sector-panel fade-up" style="transition-delay:.1s">
+        <h3>Emissions by sector <span id="secYrLbl">· 2023</span></h3>
+        <div class="sec-items" id="secItems"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOP FACILITIES -->
+<section id="facilities">
+  <div class="si">
+    <div class="fac-intro">
+      <div>
+        <p class="eyebrow fade-up">Top emitters</p>
+        <h2 class="sec-title fade-up">Biggest facilities by year</h2>
+        <p class="sec-desc fade-up">Power plants dominate every year. James H Miller Jr (AL) has led since 2015. Select a year below to explore the full top 10.</p>
+      </div>
+      <div class="fac-highlight fade-up">
+        <div class="fac-hl-lbl" id="hlLbl">2023 · #1 emitter</div>
+        <div class="fac-hl-name" id="hlName">James H Miller Jr</div>
+        <div class="fac-hl-sub">Alabama · Power Plant</div>
+        <div class="fac-hl-val" id="hlVal">16.558 Mt</div>
+        <div class="fac-hl-unit">CO₂e · EPA GHGRP</div>
+      </div>
+    </div>
+    <div class="fac-sel-row fade-up">
+      <label>Select year:</label>
+      <select id="facSel"></select>
+    </div>
+    <div class="fac-table-wrap fade-up">
+      <table class="ft">
+        <thead><tr><th>#</th><th>Facility</th><th>Emissions (Mt CO₂e)</th></tr></thead>
+        <tbody id="facBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- TOP STATES -->
+<section id="states">
+  <div class="si">
+    <p class="eyebrow fade-up">Geographic view</p>
+    <h2 class="sec-title fade-up">Top 15 states · 2023</h2>
+    <p class="sec-desc fade-up">Texas leads by a wide margin at 380 Mt — nearly 2.5× the next state. All figures direct from EPA GHGRP 2023 Direct Emitters data.</p>
+    <div class="states-grid" id="statesGrid"></div>
+  </div>
+</section>
+
+<!-- STATS BAND -->
+<section id="stats">
+  <div class="stats-inner">
+    <h2 class="stats-h fade-up">The real numbers — straight from EPA GHGRP</h2>
+    <div class="stats-grid">
+      <div class="stat-card fade-up"><div class="stat-num">3,197</div><div class="stat-lbl">Mt CO₂e reported in 2010 — the baseline year</div><div class="stat-src">EPA GHGRP Direct Emitters 2010</div></div>
+      <div class="stat-card fade-up" style="transition-delay:.08s"><div class="stat-num">2,383</div><div class="stat-lbl">Mt CO₂e reported in 2023 — the most recent year</div><div class="stat-src">EPA GHGRP Direct Emitters 2023</div></div>
+      <div class="stat-card fade-up" style="transition-delay:.16s"><div class="stat-num">−25.5%</div><div class="stat-lbl">Total reduction from 2010 to 2023 across all sectors</div><div class="stat-src">Verdeon calculation · EPA data</div></div>
+      <div class="stat-card fade-up" style="transition-delay:.24s"><div class="stat-num">6,455</div><div class="stat-lbl">Facilities reporting to GHGRP in 2023</div><div class="stat-src">EPA GHGRP Direct Emitters 2023</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="si">
+    <p class="eyebrow fade-up" style="text-align:center">Pricing</p>
+    <h2 class="sec-title fade-up" style="text-align:center">Simple, transparent pricing</h2>
+    <p class="sec-desc fade-up" style="text-align:center;margin:0 auto">Start free and scale with your team. All plans include access to the full EPA GHGRP dataset.</p>
+    <div class="price-grid">
+      <div class="price-card fade-up">
+        <div class="p-tier">Starter</div><div class="p-amt">$0</div><div class="p-per">Free forever</div>
+        <ul class="p-feats">
+          <li><span class="ck">✓</span> 2023 EPA data (latest year)</li>
+          <li><span class="ck">✓</span> Sector & state breakdowns</li>
+          <li><span class="ck">✓</span> 3 downloadable reports/month</li>
+          <li><span class="ck">✓</span> Basic reduction recommendations</li>
+        </ul>
+        <button class="p-cta">Get started free</button>
+      </div>
+      <div class="price-card feat fade-up" style="transition-delay:.1s">
+        <div class="p-badge">Most popular</div>
+        <div class="p-tier">Pro</div><div class="p-amt">$49</div><div class="p-per">per month · billed annually</div>
+        <ul class="p-feats">
+          <li><span class="ck">✓</span> Full 2010–2023 historical data</li>
+          <li><span class="ck">✓</span> All 8 EPA sector categories</li>
+          <li><span class="ck">✓</span> Facility-level drill-down</li>
+          <li><span class="ck">✓</span> State-level geographic maps</li>
+          <li><span class="ck">✓</span> Unlimited report exports</li>
+          <li><span class="ck">✓</span> Priority reduction engine</li>
+        </ul>
+        <button class="p-cta">Start Pro trial</button>
+      </div>
+      <div class="price-card fade-up" style="transition-delay:.2s">
+        <div class="p-tier">Enterprise</div><div class="p-amt">Custom</div><div class="p-per">Contact us</div>
+        <ul class="p-feats">
+          <li><span class="ck">✓</span> Everything in Pro</li>
+          <li><span class="ck">✓</span> API access & data exports</li>
+          <li><span class="ck">✓</span> Custom data integrations</li>
+          <li><span class="ck">✓</span> Dedicated sustainability analyst</li>
+          <li><span class="ck">✓</span> SSO & compliance reporting</li>
+        </ul>
+        <button class="p-cta">Talk to sales</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testi">
+  <div class="si">
+    <p class="eyebrow fade-up" style="text-align:center">Testimonials</p>
+    <h2 class="sec-title fade-up" style="text-align:center">Trusted by sustainability teams</h2>
+    <div class="testi-grid">
+      <div class="t-card fade-up"><div class="t-stars">★★★★★</div><p class="t-q">Verdeon cut our EPA data prep from two weeks to an afternoon. Seeing Texas at 380 Mt — 16% of all US reported emissions — made our board act immediately.</p><div class="t-auth"><div class="t-av">MR</div><div><div class="t-name">Maya Rodriguez</div><div class="t-role">VP Sustainability, Aldren Manufacturing</div></div></div></div>
+      <div class="t-card fade-up" style="transition-delay:.1s"><div class="t-stars">★★★★★</div><p class="t-q">The 25% reduction since 2010 gave us a credible baseline for our 2030 targets. Knowing power plants drove that decline helped us benchmark our sector realistically.</p><div class="t-auth"><div class="t-av">JK</div><div><div class="t-name">James Kim</div><div class="t-role">Director of ESG, Crestfield Energy</div></div></div></div>
+      <div class="t-card fade-up" style="transition-delay:.2s"><div class="t-stars">★★★★★</div><p class="t-q">Power plants at 59% of total — that one real number from Verdeon restructured our entire advocacy strategy. We stopped generalising and started targeting.</p><div class="t-auth"><div class="t-av">AL</div><div><div class="t-name">Amara Levi</div><div class="t-role">Climate Strategy Lead, Novara Chemical</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="si">
+    <div class="faq-layout">
+      <div>
+        <p class="eyebrow fade-up">FAQ</p>
+        <h2 class="sec-title fade-up">Questions & answers</h2>
+        <p class="sec-desc fade-up" style="margin-top:.8rem">Can't find what you need? <a href="mailto:hello@verdeon.io" style="color:var(--g700)">Email us</a> and we'll reply within 24 hours.</p>
+      </div>
+      <div class="faq-list fade-up">
+        <div class="faq-item open"><div class="faq-q">What EPA data does Verdeon actually use? <span class="chev">▼</span></div><div class="faq-a">Verdeon is built on the EPA GHGRP Direct Emitters dataset, 2010–2023. This covers facility-level emissions across 8 major sector categories and 6,000–7,000 facilities annually. Data sourced from <a href="https://www.epa.gov/ghgreporting/data-sets" style="color:var(--g600)">epa.gov/ghgreporting/data-sets</a>.</div></div>
+        <div class="faq-item"><div class="faq-q">Do I need to clean the EPA files first? <span class="chev">▼</span></div><div class="faq-a">No. Verdeon auto-detects EPA GHGRP file formats — the sheet name changed from "Direct Emitters" to "Direct Point Emitters" in 2018 — and handles all variants, header rows, and numeric formatting automatically.</div></div>
+        <div class="faq-item"><div class="faq-q">Why did emissions drop so much since 2010? <span class="chev">▼</span></div><div class="faq-a">The biggest driver is Power Plants: from 2,295 Mt in 2010 to 1,404 Mt in 2023 (−38.8%), reflecting the coal-to-gas and coal-to-renewables shift. Other sectors like Chemicals and Petroleum & Gas have stayed more stable.</div></div>
+        <div class="faq-item"><div class="faq-q">Why did emissions tick back up in 2021? <span class="chev">▼</span></div><div class="faq-a">2020 was an anomalous low (2,403 Mt) due to COVID-19 industrial slowdown. The 2021 rebound to 2,524 Mt reflects economic recovery. Emissions then resumed declining in 2022 and 2023.</div></div>
+        <div class="faq-item"><div class="faq-q">Can I export charts and reports? <span class="chev">▼</span></div><div class="faq-a">Yes — all charts export as PNG or SVG, full reports as PDF or Excel. Starter plans include 3 exports/month; Pro and Enterprise plans include unlimited exports.</div></div>
+        <div class="faq-item"><div class="faq-q">Is there an API for our own tools? <span class="chev">▼</span></div><div class="faq-a">API access is on the Enterprise plan — REST endpoints for querying aggregated emissions data, running calculations, and retrieving recommendations programmatically.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-inner">
+    <span class="cta-leaf">🌿</span>
+    <h2 class="cta-title">Start understanding your<br><em>carbon footprint today</em></h2>
+    <p class="cta-desc">Upload your EPA GHGRP files and get your first real insights in minutes. Free to start, no credit card needed.</p>
+    <div class="cta-acts">
+      <a href="#" class="btn btn-green btn-lg">Get started free</a>
+      <a href="#data" class="btn btn-ghost btn-lg">Explore the data</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <a href="#" class="nav-logo">
+        <div class="nav-logo-mark"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2C9 2 4 5.5 4 10.5C4 13.5 6.2 16 9 16C11.8 16 14 13.5 14 10.5C14 5.5 9 2 9 2Z" fill="#5ec48a"/><path d="M9 7L9 14" stroke="white" stroke-width="1.5" stroke-linecap="round"/><path d="M6.5 10L9 7.5L11.5 10" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        Verdeon
+      </a>
+      <p>Carbon intelligence powered by EPA GHGRP data. 2010–2023 facility-level emissions for 6,000+ US facilities.</p>
+      <span class="epa-note">Data: epa.gov/ghgreporting/data-sets</span>
+    </div>
+    <div class="foot-col"><h5>Product</h5><ul><li><a href="#how">How it works</a></li><li><a href="#data">Data explorer</a></li><li><a href="#facilities">Top emitters</a></li><li><a href="#pricing">Pricing</a></li></ul></div>
+    <div class="foot-col"><h5>Resources</h5><ul><li><a href="https://www.epa.gov/ghgreporting/data-sets" target="_blank">EPA Data Sets</a></li><li><a href="https://ghgdata.epa.gov/flight" target="_blank">FLIGHT Tool</a></li><li><a href="#">Documentation</a></li><li><a href="#">API reference</a></li></ul></div>
+    <div class="foot-col"><h5>Company</h5><ul><li><a href="#">About</a></li><li><a href="#">Careers</a></li><li><a href="#">Privacy policy</a></li><li><a href="mailto:hello@verdeon.io">Contact</a></li></ul></div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 Verdeon. All rights reserved.</span>
+    <span>Built on EPA GHGRP public data · 2010–2023</span>
+  </div>
+</footer>
+
+<script>
+// ── REAL EPA DATA (extracted directly from your uploaded files) ──────────────
+const EPA = {
+  2010:{t:3196.57,f:6256,s:{"Power Plants":2295.21,"Waste":110.91,"Chemicals":104.11,"Minerals":100.97,"Metals":90.79,"Other":81.01,"Petroleum & Gas":65.45,"Refineries":50.8},st:{"TX":386.94,"IN":162.68,"OH":156.74,"PA":152.93,"FL":146.52,"IL":134.23,"LA":131.64,"KY":114.21,"CA":110.2,"AL":101.86,"MI":99.29,"GA":96.15,"MO":92.03,"NC":80.85,"WV":79.46},fac:[{n:"Scherer",m:22.985},{n:"Bowen",m:21.032},{n:"James H Miller Jr",m:20.758},{n:"Martin Lake",m:18.698},{n:"Gibson",m:17.998},{n:"Monroe",m:17.855},{n:"Labadie",m:17.369},{n:"Colstrip",m:17.125},{n:"Gen J M Gavin",m:16.877},{n:"Rockport",m:16.67}]},
+  2011:{t:3207.58,f:6871,s:{"Power Plants":2136.86,"Other":106.91,"Waste":104.6,"Minerals":100.5,"Petroleum & Gas":94.21,"Chemicals":83.93,"Metals":82.64,"Refineries":58.92},st:{"TX":407.2,"IN":164.91,"PA":152.76,"OH":149.45,"LA":144.56,"FL":140.74,"IL":136.63,"KY":121.8,"AL":111.17,"CA":103.32,"MO":95.15,"MI":93.99,"WV":91.07,"GA":87.02,"OK":72.05},fac:[{n:"Scherer",m:22.074},{n:"James H Miller Jr",m:22.067},{n:"Martin Lake",m:18.445},{n:"Labadie",m:18.234},{n:"W A Parish",m:17.731},{n:"Gen J M Gavin",m:17.655},{n:"Navajo Generating Station",m:16.936},{n:"Bruce Mansfield",m:16.276},{n:"Monroe",m:15.94},{n:"Gibson",m:15.827}]},
+  2012:{t:3058.08,f:7042,s:{"Power Plants":1995.04,"Waste":105.35,"Minerals":104.89,"Other":104.66,"Petroleum & Gas":96.16,"Chemicals":80.35,"Metals":78.09,"Refineries":61.82},st:{"TX":393.54,"IN":154.62,"PA":143.09,"LA":140.67,"OH":133.62,"FL":133.0,"IL":129.96,"CA":114.49,"KY":110.99,"AL":102.95,"MI":92.16,"MO":88.67,"WV":85.6,"GA":74.96,"OK":70.93},fac:[{n:"Scherer",m:21.816},{n:"James H Miller Jr",m:18.557},{n:"Rockport",m:17.895},{n:"Gibson",m:16.905},{n:"Gen J M Gavin",m:16.639},{n:"Bruce Mansfield",m:16.269},{n:"Martin Lake",m:15.547},{n:"Navajo Generating Station",m:15.479},{n:"Monroe",m:15.217},{n:"Paradise",m:14.93}]},
+  2013:{t:3073.21,f:7142,s:{"Power Plants":2006.49,"Minerals":108.4,"Other":106.58,"Waste":102.07,"Petroleum & Gas":93.75,"Chemicals":85.41,"Metals":77.11,"Refineries":63.33},st:{"TX":405.43,"IN":155.56,"PA":144.85,"OH":137.39,"LA":136.95,"IL":133.74,"FL":128.94,"CA":114.44,"KY":109.94,"AL":101.9,"MI":91.57,"MO":89.79,"WV":88.08,"GA":73.44,"OK":68.78},fac:[{n:"Scherer",m:22.293},{n:"James H Miller Jr",m:21.871},{n:"Navajo Generating Station",m:16.296},{n:"Bruce Mansfield",m:16.159},{n:"Martin Lake",m:16.129},{n:"Gibson",m:15.974},{n:"W A Parish",m:15.796},{n:"Monroe",m:15.453},{n:"Labadie",m:15.33},{n:"Rockport",m:14.797}]},
+  2014:{t:3084.07,f:7277,s:{"Power Plants":1997.66,"Minerals":113.97,"Other":110.05,"Waste":101.76,"Petroleum & Gas":96.54,"Chemicals":89.87,"Metals":77.96,"Refineries":66.16},st:{"TX":406.97,"IN":159.74,"LA":137.41,"OH":137.39,"PA":136.9,"FL":134.7,"IL":131.45,"CA":116.38,"KY":110.48,"AL":104.08,"WV":94.86,"MI":87.91,"MO":86.6,"GA":78.86,"OK":67.09},fac:[{n:"Scherer",m:20.482},{n:"James H Miller Jr",m:19.903},{n:"Navajo Generating Station",m:17.248},{n:"Gibson",m:16.295},{n:"W A Parish",m:16.13},{n:"Rockport",m:15.804},{n:"Bowen",m:15.642},{n:"Bruce Mansfield",m:15.639},{n:"Gen J M Gavin",m:15.574},{n:"Monroe",m:15.144}]},
+  2015:{t:2939.44,f:7188,s:{"Power Plants":1874.09,"Minerals":112.49,"Other":111.51,"Waste":100.82,"Petroleum & Gas":98.2,"Chemicals":93.3,"Metals":69.73,"Refineries":66.4},st:{"TX":396.11,"IN":141.5,"LA":138.56,"FL":132.63,"PA":127.69,"OH":120.21,"IL":119.58,"CA":112.46,"KY":99.68,"AL":98.21,"MI":89.67,"WV":88.36,"MO":80.18,"GA":74.23,"OK":64.34},fac:[{n:"James H Miller Jr",m:19.247},{n:"Scherer",m:17.993},{n:"Colstrip",m:15.973},{n:"Monroe",m:15.484},{n:"W A Parish",m:15.397},{n:"Labadie",m:14.754},{n:"Navajo Generating Station",m:14.169},{n:"Gen J M Gavin",m:13.823},{n:"Gibson",m:13.459},{n:"Jim Bridger",m:13.238}]},
+  2016:{t:2804.14,f:6548,s:{"Power Plants":1770.8,"Minerals":108.24,"Other":106.24,"Chemicals":99.0,"Waste":97.58,"Petroleum & Gas":76.2,"Metals":69.33,"Refineries":66.63},st:{"TX":385.33,"LA":139.32,"IN":138.0,"FL":134.0,"PA":119.18,"OH":115.53,"IL":106.41,"CA":97.75,"KY":91.33,"WV":89.64,"AL":89.54,"MI":82.37,"MO":75.08,"GA":74.95,"NC":62.45},fac:[{n:"James H Miller Jr",m:19.733},{n:"Scherer",m:17.657},{n:"Gibson",m:15.451},{n:"Bowen",m:15.423},{n:"Colstrip",m:14.39},{n:"Monroe",m:14.007},{n:"Labadie",m:13.966},{n:"John E Amos",m:13.733},{n:"W A Parish",m:13.434},{n:"Gen J M Gavin",m:13.298}]},
+  2017:{t:2734.72,f:6465,s:{"Power Plants":1696.14,"Minerals":111.6,"Other":104.36,"Chemicals":100.88,"Waste":96.18,"Petroleum & Gas":79.75,"Metals":70.28,"Refineries":66.5},st:{"TX":388.55,"LA":140.64,"IN":135.66,"FL":131.85,"OH":115.61,"PA":114.89,"IL":101.38,"CA":93.92,"WV":86.34,"AL":85.04,"KY":83.85,"MI":81.44,"MO":81.3,"GA":68.3,"WY":60.35},fac:[{n:"James H Miller Jr",m:20.798},{n:"Gibson",m:16.464},{n:"Monroe",m:15.511},{n:"Scherer",m:15.366},{n:"W A Parish",m:15.295},{n:"Labadie",m:15.207},{n:"Navajo Generating Station",m:14.535},{n:"Gen J M Gavin",m:14.145},{n:"Martin Lake",m:13.937},{n:"Colstrip",m:13.935}]},
+  2018:{t:2778.82,f:6560,s:{"Power Plants":1710.45,"Minerals":113.32,"Chemicals":105.03,"Other":104.53,"Waste":98.33,"Petroleum & Gas":91.77,"Metals":72.26,"Refineries":66.87},st:{"TX":390.03,"LA":145.17,"IN":143.05,"FL":132.58,"PA":112.62,"OH":112.38,"IL":105.15,"CA":95.51,"AL":88.1,"KY":86.23,"MI":84.62,"WV":79.28,"MO":78.95,"GA":68.9,"WY":59.33},fac:[{n:"James H Miller Jr",m:18.43},{n:"Scherer",m:16.695},{n:"Monroe",m:16.401},{n:"Gibson",m:16.326},{n:"Martin Lake",m:14.871},{n:"Labadie",m:14.847},{n:"W A Parish",m:14.621},{n:"Gen J M Gavin",m:14.473},{n:"Navajo Generating Station",m:13.961},{n:"Bowen",m:13.437}]},
+  2019:{t:2628.05,f:6559,s:{"Power Plants":1577.76,"Minerals":112.09,"Chemicals":107.24,"Other":102.71,"Petroleum & Gas":101.53,"Waste":99.74,"Metals":69.41,"Refineries":64.52},st:{"TX":383.17,"LA":146.96,"IN":128.46,"FL":119.62,"PA":113.91,"OH":103.14,"IL":96.01,"CA":91.46,"AL":81.56,"MI":78.63,"KY":78.29,"WV":75.05,"MO":71.34,"GA":65.64,"NC":56.04},fac:[{n:"James H Miller Jr",m:19.17},{n:"Monroe",m:15.145},{n:"Colstrip",m:14.278},{n:"Labadie",m:14.18},{n:"Scherer",m:13.764},{n:"Gen J M Gavin",m:13.045},{n:"W A Parish",m:12.862},{n:"Prairie State",m:12.737},{n:"Martin Lake",m:12.704},{n:"Oak Grove",m:12.337}]},
+  2020:{t:2402.68,f:6527,s:{"Power Plants":1424.97,"Minerals":107.06,"Chemicals":105.04,"Petroleum & Gas":98.47,"Waste":95.52,"Other":95.47,"Refineries":61.18,"Metals":59.2},st:{"TX":360.84,"LA":135.97,"FL":119.73,"IN":111.89,"PA":103.6,"OH":101.67,"CA":90.33,"IL":77.11,"AL":73.8,"MO":68.06,"WV":67.39,"KY":66.4,"MI":66.27,"GA":52.96,"WY":52.66},fac:[{n:"James H Miller Jr",m:17.233},{n:"Labadie",m:15.711},{n:"Gen J M Gavin",m:13.788},{n:"Martin Lake",m:13.518},{n:"Oak Grove",m:13.103},{n:"Monroe",m:13.059},{n:"Prairie State",m:11.95},{n:"Gibson",m:11.391},{n:"ExxonMobil BT Site",m:11.308},{n:"Jim Bridger",m:11.225}]},
+  2021:{t:2523.51,f:6499,s:{"Power Plants":1521.33,"Minerals":111.76,"Chemicals":109.51,"Petroleum & Gas":101.96,"Other":97.47,"Waste":93.51,"Metals":62.81,"Refineries":59.97},st:{"TX":373.12,"LA":140.42,"IN":119.95,"FL":117.06,"PA":110.95,"OH":104.91,"CA":91.96,"IL":86.43,"AL":78.49,"WV":76.2,"MI":74.28,"KY":73.78,"MO":73.2,"GA":56.71,"WY":51.07},fac:[{n:"James H Miller Jr",m:20.999},{n:"Labadie",m:15.76},{n:"Monroe",m:14.379},{n:"W A Parish",m:13.911},{n:"Martin Lake",m:13.515},{n:"Gen J M Gavin",m:13.478},{n:"Oak Grove",m:12.617},{n:"Prairie State",m:12.497},{n:"ExxonMobil BT Site",m:11.811},{n:"John E Amos",m:11.529}]},
+  2022:{t:2504.28,f:6490,s:{"Power Plants":1513.77,"Chemicals":112.16,"Minerals":111.97,"Petroleum & Gas":108.42,"Other":95.37,"Waste":91.76,"Refineries":64.51,"Metals":57.41},st:{"TX":383.31,"LA":147.6,"IN":116.75,"FL":112.63,"PA":108.28,"OH":105.55,"CA":91.42,"IL":82.56,"AL":79.69,"MI":74.63,"KY":72.62,"MO":70.44,"WV":67.88,"GA":55.07,"WY":52.72},fac:[{n:"James H Miller Jr",m:21.775},{n:"Labadie",m:15.861},{n:"Monroe",m:14.908},{n:"Martin Lake",m:13.33},{n:"Oak Grove",m:12.698},{n:"ExxonMobil BT Site",m:12.612},{n:"W A Parish",m:12.436},{n:"Harrison Power Station",m:11.694},{n:"Laramie River",m:11.525},{n:"Gen J M Gavin",m:11.299}]},
+  2023:{t:2382.84,f:6455,s:{"Power Plants":1403.94,"Chemicals":113.06,"Petroleum & Gas":109.44,"Minerals":106.79,"Other":94.85,"Waste":92.22,"Refineries":64.0,"Metals":59.17},st:{"TX":379.85,"LA":144.32,"FL":108.91,"IN":107.9,"PA":102.73,"OH":99.8,"CA":90.48,"AL":72.03,"IL":71.36,"MI":67.55,"KY":65.08,"WV":64.56,"MO":59.53,"GA":54.79,"WY":50.05},fac:[{n:"James H Miller Jr",m:16.558},{n:"Labadie",m:15.389},{n:"Gen J M Gavin",m:13.451},{n:"Martin Lake",m:12.788},{n:"ExxonMobil BT Site",m:12.694},{n:"Oak Grove",m:12.279},{n:"Prairie State",m:11.456},{n:"Monroe",m:11.413},{n:"Harrison Power Station",m:11.18},{n:"Laramie River",m:10.98}]}
+};
+
+const YEARS = Object.keys(EPA).map(Number);
+const COLS = ["#1a5c38","#3aad6b","#5ec48a","#8fd9a8","#bfedcf","#237848","#2d9459","#0e3320"];
+let activeYear = 2023;
+
+// ── HERO MINI BARS ──────────────────────────────────────────────────────────
+const heroBars = document.getElementById('heroBars');
+const heroYrs  = document.getElementById('heroYrs');
+const maxT = Math.max(...YEARS.map(y => EPA[y].t));
+YEARS.forEach(yr => {
+  const pct = (EPA[yr].t / maxT * 100).toFixed(1);
+  const b = document.createElement('div');
+  b.className = 'mb' + (yr === 2023 ? ' act' : '');
+  b.style.height = pct + '%';
+  if (yr !== 2023) b.style.background = yr < 2015 ? '#bfedcf' : yr < 2019 ? '#8fd9a8' : '#5ec48a';
+  b.title = `${yr}: ${EPA[yr].t.toLocaleString()} Mt`;
+  heroBars.appendChild(b);
+  const s = document.createElement('span');
+  s.textContent = String(yr).slice(2);
+  heroYrs.appendChild(s);
+});
+
+// ── TREND CANVAS ────────────────────────────────────────────────────────────
+function drawTrend(hlYr) {
+  const canvas = document.getElementById('trendCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.offsetWidth || 400, H = 150;
+  canvas.width = W * devicePixelRatio; canvas.height = H * devicePixelRatio;
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+
+  const vals = YEARS.map(y => EPA[y].t);
+  const lo = Math.min(...vals) * .93, hi = Math.max(...vals) * 1.04;
+  const pad = {l:6,r:6,t:10,b:22};
+  const cw = W-pad.l-pad.r, ch = H-pad.t-pad.b;
+  const xOf = i => pad.l + (i/(YEARS.length-1))*cw;
+  const yOf = v => pad.t + (1-(v-lo)/(hi-lo))*ch;
+
+  // gradient fill
+  ctx.beginPath();
+  ctx.moveTo(xOf(0), yOf(vals[0]));
+  YEARS.forEach((_,i) => ctx.lineTo(xOf(i), yOf(vals[i])));
+  ctx.lineTo(xOf(YEARS.length-1), H-pad.b);
+  ctx.lineTo(xOf(0), H-pad.b); ctx.closePath();
+  const g = ctx.createLinearGradient(0,pad.t,0,H-pad.b);
+  g.addColorStop(0,'rgba(45,148,89,.2)'); g.addColorStop(1,'rgba(45,148,89,0)');
+  ctx.fillStyle = g; ctx.fill();
+
+  // line
+  ctx.beginPath();
+  YEARS.forEach((_,i) => { i===0 ? ctx.moveTo(xOf(i),yOf(vals[i])) : ctx.lineTo(xOf(i),yOf(vals[i])); });
+  ctx.strokeStyle='#2d9459'; ctx.lineWidth=2; ctx.lineJoin='round'; ctx.stroke();
+
+  // dots
+  YEARS.forEach((yr,i) => {
+    const hl = yr===hlYr;
+    ctx.beginPath(); ctx.arc(xOf(i),yOf(vals[i]),hl?5:3,0,Math.PI*2);
+    ctx.fillStyle = hl ? '#1a5c38' : '#3aad6b'; ctx.fill();
+    if(hl){ctx.strokeStyle='white';ctx.lineWidth=2;ctx.stroke();}
+  });
+
+  // year axis labels
+  ctx.fillStyle='#6b7a72'; ctx.font=`10px Instrument Sans,sans-serif`; ctx.textAlign='center';
+  YEARS.forEach((yr,i) => { if(i%2===0) ctx.fillText(yr, xOf(i), H-4); });
+
+  // tooltip
+  const hi_i = YEARS.indexOf(hlYr);
+  if(hi_i>=0){
+    const tx=xOf(hi_i), ty=yOf(vals[hi_i]);
+    const label = vals[hi_i].toFixed(0)+' Mt';
+    ctx.font='bold 11px Instrument Sans,sans-serif';
+    const tw=ctx.measureText(label).width;
+    const bx=Math.min(Math.max(tx-tw/2-6,0),W-tw-14), by=ty-28;
+    ctx.fillStyle='#1a5c38'; ctx.beginPath(); ctx.roundRect(bx,by,tw+12,20,4); ctx.fill();
+    ctx.fillStyle='white'; ctx.textAlign='left'; ctx.fillText(label,bx+6,by+14);
+  }
+}
+
+// ── YEAR BUTTONS ─────────────────────────────────────────────────────────────
+const yrBtns = document.getElementById('yrBtns');
+YEARS.forEach(yr => {
+  const b = document.createElement('button');
+  b.className = 'yr-btn' + (yr===2023?' on':'');
+  b.textContent = yr;
+  b.onclick = () => {
+    activeYear = yr;
+    document.querySelectorAll('.yr-btn').forEach(x => x.classList.toggle('on', +x.textContent===yr));
+    updateView(yr);
+  };
+  yrBtns.appendChild(b);
+});
+
+function updateView(yr) {
+  const d = EPA[yr];
+  document.getElementById('trendVal').textContent = d.t.toLocaleString(undefined,{minimumFractionDigits:0,maximumFractionDigits:0}) + ' Mt';
+  document.getElementById('trendSub').textContent = `CO₂e · ${yr} · ${d.f.toLocaleString()} facilities`;
+  document.getElementById('secYrLbl').textContent = `· ${yr}`;
+  drawTrend(yr);
+  renderSectors(yr);
+  renderFacTable(yr);
+  // update highlight card
+  const top = d.fac[0];
+  document.getElementById('hlLbl').textContent = `${yr} · #1 emitter`;
+  document.getElementById('hlName').textContent = top.n;
+  document.getElementById('hlVal').textContent = top.m.toFixed(3) + ' Mt';
+  // sync facility select
+  document.getElementById('facSel').value = yr;
+}
+
+// ── SECTORS ──────────────────────────────────────────────────────────────────
+function renderSectors(yr) {
+  const s = EPA[yr].s;
+  const max = Math.max(...Object.values(s));
+  document.getElementById('secItems').innerHTML = Object.entries(s).map(([name,val],i) =>
+    `<div class="sec-item">
+      <div class="sit"><span class="sn">${name}</span><span class="sv">${val.toFixed(0)} Mt</span></div>
+      <div class="sb"><div class="sf" style="width:${(val/max*100).toFixed(1)}%;background:${COLS[i%COLS.length]}"></div></div>
+    </div>`
+  ).join('');
+}
+
+// ── FACILITY TABLE ────────────────────────────────────────────────────────────
+const facSel = document.getElementById('facSel');
+YEARS.slice().reverse().forEach(yr => {
+  const o = document.createElement('option');
+  o.value=yr; o.textContent=yr; if(yr===2023) o.selected=true;
+  facSel.appendChild(o);
+});
+facSel.onchange = () => updateView(+facSel.value);
+
+function renderFacTable(yr) {
+  document.getElementById('facBody').innerHTML = EPA[yr].fac.map((f,i) =>
+    `<tr><td><span class="rank${i<3?' top3':''}">${i+1}</span></td><td>${f.n}</td><td>${f.m.toFixed(3)} Mt</td></tr>`
+  ).join('');
+}
+
+// ── STATES GRID ───────────────────────────────────────────────────────────────
+document.getElementById('statesGrid').innerHTML = Object.entries(EPA[2023].st).map(([st,mt],i) =>
+  `<div class="state-card"><div class="st-ab">${st}</div><div class="st-mt">${mt.toFixed(0)} Mt</div><div class="st-rk">#${i+1} in US</div></div>`
+).join('');
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+updateView(2023);
+
+// ── NAV SCROLL ───────────────────────────────────────────────────────────────
+window.addEventListener('scroll', () => document.getElementById('nav').classList.toggle('scrolled', scrollY>20));
+
+// ── FADE UP ───────────────────────────────────────────────────────────────────
+const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:.1});
+document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+// ── FAQ ───────────────────────────────────────────────────────────────────────
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.parentElement;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if(!wasOpen) item.classList.add('open');
+  });
+});
+
+window.addEventListener('resize', () => drawTrend(activeYear));
+</script>
+</body>
+</html>
