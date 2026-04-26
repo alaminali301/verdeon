@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import type { EpaDataset, SectorName } from '@/lib/data/types'
 
-interface EpaStore {
+export interface EpaStore {
   activeYear: number
   activeSector: SectorName | null
   activeState: string | null
