@@ -50,7 +50,7 @@ export function DonutChart({
       </div>
       <div className="grid gap-5 md:grid-cols-[minmax(0,220px)_1fr] md:items-center">
         <div className="h-[220px] w-full">
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height="100%" minWidth={0}>
             <PieChart>
               <Pie
                 data={items}

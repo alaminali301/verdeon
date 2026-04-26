@@ -61,7 +61,7 @@ export function SectorBarChart({
         Emissions by sector <span className="text-sm font-normal text-muted">· {year}</span>
       </h3>
       <div className="h-[300px] w-full">
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
           <BarChart data={chartData} layout="vertical" margin={{ top: 0, right: 28, left: 22, bottom: 0 }} barCategoryGap={16}>
             <XAxis type="number" hide />
             <YAxis

@@ -23,7 +23,7 @@ export function MiniBarChart({
         US emissions 2010–2023 (Mt CO₂e) — EPA GHGRP
       </div>
       <div className="h-[86px] w-full">
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
           <BarChart data={data} margin={{ top: 4, right: 0, left: 0, bottom: 0 }} barCategoryGap={3}>
             <XAxis dataKey="year" hide />
             <YAxis hide />

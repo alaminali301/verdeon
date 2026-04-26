@@ -107,7 +107,7 @@ export function TrendChart({
       </div>
 
       <div className="h-[190px] w-full">
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
           <AreaChart data={data} margin={{ top: 10, right: 6, left: 6, bottom: 14 }}>
             <defs>
               <linearGradient id="verdeonTrendFill" x1="0" y1="0" x2="0" y2="1">
