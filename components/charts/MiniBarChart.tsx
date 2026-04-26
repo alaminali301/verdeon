@@ -18,7 +18,11 @@ export function MiniBarChart({
   className = '',
 }: MiniBarChartProps) {
   return (
-    <div className={className}>
+    <div
+      className={className}
+      role="img"
+      aria-label={`Compact bar chart of annual US emissions from 2010 to 2023. Active year ${activeYear}.`}
+    >
       <div className="mb-1 text-[0.72rem] font-medium text-muted">
         US emissions 2010–2023 (Mt CO₂e) — EPA GHGRP
       </div>
@@ -48,6 +52,7 @@ export function MiniBarChart({
             key={point.year}
             type="button"
             onClick={() => onYearSelect?.(point.year)}
+            aria-label={`Select year ${point.year} on compact emissions chart`}
             className={[
               'flex-1 text-center text-[0.64rem] leading-none',
               point.year === activeYear ? 'text-green-900' : 'text-muted',

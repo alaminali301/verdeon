@@ -1,13 +1,10 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { type ReactNode, useEffect, useRef, useState } from 'react'
 import { ChevronDown } from 'lucide-react'
-import { MiniBarChart } from '@/components/charts/MiniBarChart'
-import { SectorBarChart } from '@/components/charts/SectorBarChart'
-import { TrendChart } from '@/components/charts/TrendChart'
-import { Footer } from '@/components/layout/Footer'
-import { Navbar } from '@/components/layout/Navbar'
+import { ChartSkeleton } from '@/components/charts/ChartSkeleton'
 import { PageWrapper } from '@/components/layout/PageWrapper'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
@@ -24,6 +21,19 @@ import {
 } from '@/lib/data/selectors'
 import { formatFacilities, formatMt, formatPct } from '@/lib/utils/format'
 import { SECTOR_COLORS } from '@/lib/utils/colors'
+
+const MiniBarChart = dynamic(
+  () => import('@/components/charts/MiniBarChart').then((mod) => mod.MiniBarChart),
+  { ssr: false, loading: () => <ChartSkeleton className="min-h-[86px]" /> },
+)
+const SectorBarChart = dynamic(
+  () => import('@/components/charts/SectorBarChart').then((mod) => mod.SectorBarChart),
+  { ssr: false, loading: () => <ChartSkeleton className="min-h-[360px]" /> },
+)
+const TrendChart = dynamic(
+  () => import('@/components/charts/TrendChart').then((mod) => mod.TrendChart),
+  { ssr: false, loading: () => <ChartSkeleton className="min-h-[350px]" /> },
+)
 
 type FaqItem = {
   question: string
@@ -247,8 +257,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white text-charcoal">
-      <Navbar />
-
       <main className="overflow-x-hidden pt-24">
         <section className="relative px-6 pb-16 pt-10 md:pb-20">
           <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -759,7 +767,6 @@ export default function Home() {
         </section>
       </main>
 
-      <Footer />
     </div>
   )
 }

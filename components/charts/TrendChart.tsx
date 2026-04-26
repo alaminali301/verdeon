@@ -90,7 +90,11 @@ export function TrendChart({
   }
 
   return (
-    <div className={['rounded-lg border border-green-100 bg-green-50 p-6', className].join(' ')}>
+    <div
+      className={['rounded-lg border border-green-100 bg-green-50 p-6', className].join(' ')}
+      role="img"
+      aria-label={`Trend chart of total US reported emissions from 2010 to 2023. Active year ${resolvedActiveYear}.`}
+    >
       <div className="mb-5 flex items-start justify-between gap-4">
         <div>
           <p className="mb-1 text-[0.75rem] font-semibold uppercase tracking-[0.06em] text-muted">
@@ -148,6 +152,7 @@ export function TrendChart({
               key={point.year}
               type="button"
               onClick={() => onYearSelect?.(point.year)}
+              aria-label={`Select year ${point.year} on emissions trend chart`}
               className={[
                 'rounded-full border px-3 py-1 text-xs font-medium transition-colors',
                 isActive

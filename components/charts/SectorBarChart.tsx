@@ -56,7 +56,11 @@ export function SectorBarChart({
   }))
 
   return (
-    <div className={['rounded-[14px] border border-green-100 bg-white p-5 shadow-card', className].join(' ')}>
+    <div
+      className={['rounded-[14px] border border-green-100 bg-white p-5 shadow-card', className].join(' ')}
+      role="img"
+      aria-label={`Horizontal bar chart of emissions by sector for ${year}.`}
+    >
       <h3 className="mb-5 text-base font-semibold text-green-900">
         Emissions by sector <span className="text-sm font-normal text-muted">· {year}</span>
       </h3>
