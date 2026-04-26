@@ -1,3 +1,44 @@
-export function FacilityTable() {
-  return <div className="rounded-md border border-dashed border-green-200 p-6">FacilityTable scaffold</div>
+import { formatMt } from '@/lib/utils/format'
+
+export interface FacilityRow {
+  name: string
+  mt: number
+}
+
+export interface FacilityTableProps {
+  rows: FacilityRow[]
+}
+
+export function FacilityTable({ rows }: FacilityTableProps) {
+  return (
+    <div className="overflow-hidden rounded-[20px] border border-green-100 bg-white shadow-card">
+      <table className="w-full border-collapse">
+        <thead className="bg-green-900 text-left text-sm text-white">
+          <tr>
+            <th className="px-5 py-4 font-medium">#</th>
+            <th className="px-5 py-4 font-medium">Facility</th>
+            <th className="px-5 py-4 font-medium">Emissions (Mt CO₂e)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((facility, index) => (
+            <tr key={`${facility.name}-${index}`} className="border-t border-green-100">
+              <td className="px-5 py-4">
+                <span
+                  className={[
+                    'inline-flex h-8 min-w-8 items-center justify-center rounded-full px-2 text-xs font-semibold',
+                    index < 3 ? 'bg-green-900 text-white' : 'bg-green-50 text-green-900',
+                  ].join(' ')}
+                >
+                  {index + 1}
+                </span>
+              </td>
+              <td className="px-5 py-4 text-sm text-green-900">{facility.name}</td>
+              <td className="px-5 py-4 text-sm text-muted">{formatMt(facility.mt)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
 }
