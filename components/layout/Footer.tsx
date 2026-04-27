@@ -14,7 +14,7 @@ const footerColumns = [
     title: 'Resources',
     links: [
       { href: '/states', label: 'States' },
-      { href: '/methodology', label: 'Data notes' },
+      { href: '/methodology', label: 'Methodology' },
       { href: '/guides/epa-ghgrp-explained', label: 'EPA GHGRP guide' },
       { href: '/upload', label: 'Upload data' },
     ],
@@ -95,7 +95,9 @@ export function Footer() {
 
         <div className="mt-10 flex flex-col gap-3 border-t border-white/6 pt-8 text-[0.76rem] text-white/40 md:flex-row md:items-center md:justify-between">
           <p>Verdeon helps people inspect EPA greenhouse gas reporting data without enterprise software.</p>
-          <p>EPA attribution: figures sourced from EPA GHGRP Direct Emitters datasets and derived Verdeon calculations.</p>
+          <p>
+            EPA attribution: figures sourced from EPA GHGRP Direct Emitters datasets and derived Verdeon calculations. Verify important figures against the original EPA source and report corrections through the contact page.
+          </p>
         </div>
       </PageWrapper>
     </footer>

@@ -37,6 +37,65 @@ type CompareMode = 'state' | 'facility'
 
 const MODE_OPTIONS: CompareMode[] = ['state', 'facility']
 
+type SearchFieldProps = {
+  selectedValue: string
+  options: string[]
+  placeholder: string
+  ariaLabel: string
+  onSelect: (value: string) => void
+}
+
+function SearchField({ selectedValue, options, placeholder, ariaLabel, onSelect }: SearchFieldProps) {
+  const [query, setQuery] = useState(selectedValue)
+  const deferredQuery = useDeferredValue(query)
+
+  const filteredOptions = options
+    .filter((option) => option.toLowerCase().includes(deferredQuery.toLowerCase()))
+    .slice(0, 6)
+
+  function resolveSelection(fallback: string) {
+    const exact = options.find((option) => option.toLowerCase() === query.trim().toLowerCase())
+    return exact ?? fallback
+  }
+
+  return (
+    <div className="rounded-[18px] border border-green-200 bg-white p-3">
+      <div className="flex items-center gap-2 rounded-[14px] border border-green-100 px-3 py-3">
+        <Search size={16} className="text-green-700" />
+        <input
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          onBlur={() => setQuery(resolveSelection(selectedValue))}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              event.preventDefault()
+              onSelect(resolveSelection(selectedValue))
+            }
+          }}
+          placeholder={placeholder}
+          className="w-full bg-transparent text-sm text-green-900 outline-none placeholder:text-muted"
+          aria-label={ariaLabel}
+        />
+      </div>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {filteredOptions.map((option) => (
+          <button
+            key={option}
+            type="button"
+            onClick={() => {
+              setQuery(option)
+              onSelect(option)
+            }}
+            className="rounded-full border border-green-200 bg-green-50 px-3 py-1.5 text-xs text-green-900 transition-colors hover:bg-green-100"
+          >
+            {option}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export default function ComparePage() {
   return (
     <Suspense fallback={<main className="px-6 py-12 pt-28" />}>
@@ -73,19 +132,6 @@ function ComparePageContent() {
   const defaultB = options[1] ?? options[0] ?? ''
   const selectedA = options.includes(searchParams.get('a') ?? '') ? (searchParams.get('a') as string) : defaultA
   const selectedB = options.includes(searchParams.get('b') ?? '') ? (searchParams.get('b') as string) : defaultB
-  const [queryA, setQueryA] = useState(selectedA)
-  const [queryB, setQueryB] = useState(selectedB)
-  const deferredQueryA = useDeferredValue(queryA)
-  const deferredQueryB = useDeferredValue(queryB)
-
-  useEffect(() => {
-    setQueryA(selectedA)
-  }, [selectedA])
-
-  useEffect(() => {
-    setQueryB(selectedB)
-  }, [selectedB])
-
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString())
     let needsReplace = false
@@ -121,18 +167,6 @@ function ComparePageContent() {
     if (a) params.set('a', a)
     if (b) params.set('b', b)
     router.replace((`/compare?${params.toString()}`) as Route)
-  }
-
-  const filteredA = options
-    .filter((option) => option.toLowerCase().includes(deferredQueryA.toLowerCase()))
-    .slice(0, 6)
-  const filteredB = options
-    .filter((option) => option.toLowerCase().includes(deferredQueryB.toLowerCase()))
-    .slice(0, 6)
-
-  function resolveSelection(query: string, fallback: string) {
-    const exact = options.find((option) => option.toLowerCase() === query.trim().toLowerCase())
-    return exact ?? fallback
   }
 
   const seriesA = useMemo(() => {
@@ -242,42 +276,14 @@ function ComparePageContent() {
                   {getJurisdictionName(selectedA)} · {selectedA}
                 </div>
               ) : null}
-              <div className="rounded-[18px] border border-green-200 bg-white p-3">
-                <div className="flex items-center gap-2 rounded-[14px] border border-green-100 px-3 py-3">
-                  <Search size={16} className="text-green-700" />
-                  <input
-                    value={queryA}
-                    onChange={(event) => setQueryA(event.target.value)}
-                    onBlur={() => setQueryA(resolveSelection(queryA, selectedA))}
-                    onKeyDown={(event) => {
-                      if (event.key === 'Enter') {
-                        event.preventDefault()
-                        updateParams({ a: resolveSelection(queryA, selectedA) })
-                      }
-                    }}
-                    placeholder={requestedMode === 'facility' ? 'Search facility' : 'Search state'}
-                    className="w-full bg-transparent text-sm text-green-900 outline-none placeholder:text-muted"
-                    aria-label="Search first comparison item"
-                  />
-                </div>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {filteredA.map((option) => (
-                    <button
-                      key={option}
-                      type="button"
-                      onClick={() => updateParams({ a: option })}
-                      className={[
-                        'rounded-full border px-3 py-1.5 text-xs transition-colors',
-                        selectedA === option
-                          ? 'border-green-900 bg-green-900 text-white'
-                          : 'border-green-200 bg-green-50 text-green-900 hover:bg-green-100',
-                      ].join(' ')}
-                    >
-                      {option}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              <SearchField
+                key={`${requestedMode}-${selectedA}`}
+                selectedValue={selectedA}
+                options={options}
+                placeholder={requestedMode === 'facility' ? 'Search facility' : 'Search state'}
+                ariaLabel="Search first comparison item"
+                onSelect={(value) => updateParams({ a: value })}
+              />
             </label>
 
             <div className="flex justify-center xl:pb-1">
@@ -298,42 +304,14 @@ function ComparePageContent() {
                   {getJurisdictionName(selectedB)} · {selectedB}
                 </div>
               ) : null}
-              <div className="rounded-[18px] border border-green-200 bg-white p-3">
-                <div className="flex items-center gap-2 rounded-[14px] border border-green-100 px-3 py-3">
-                  <Search size={16} className="text-green-700" />
-                  <input
-                    value={queryB}
-                    onChange={(event) => setQueryB(event.target.value)}
-                    onBlur={() => setQueryB(resolveSelection(queryB, selectedB))}
-                    onKeyDown={(event) => {
-                      if (event.key === 'Enter') {
-                        event.preventDefault()
-                        updateParams({ b: resolveSelection(queryB, selectedB) })
-                      }
-                    }}
-                    placeholder={requestedMode === 'facility' ? 'Search facility' : 'Search state'}
-                    className="w-full bg-transparent text-sm text-green-900 outline-none placeholder:text-muted"
-                    aria-label="Search second comparison item"
-                  />
-                </div>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {filteredB.map((option) => (
-                    <button
-                      key={option}
-                      type="button"
-                      onClick={() => updateParams({ b: option })}
-                      className={[
-                        'rounded-full border px-3 py-1.5 text-xs transition-colors',
-                        selectedB === option
-                          ? 'border-green-900 bg-green-900 text-white'
-                          : 'border-green-200 bg-green-50 text-green-900 hover:bg-green-100',
-                      ].join(' ')}
-                    >
-                      {option}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              <SearchField
+                key={`${requestedMode}-${selectedB}`}
+                selectedValue={selectedB}
+                options={options}
+                placeholder={requestedMode === 'facility' ? 'Search facility' : 'Search state'}
+                ariaLabel="Search second comparison item"
+                onSelect={(value) => updateParams({ b: value })}
+              />
             </label>
 
             <label className="block">

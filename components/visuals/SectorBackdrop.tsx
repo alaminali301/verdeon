@@ -2,7 +2,6 @@
 
 import { AnimatePresence, motion } from 'framer-motion'
 import type { ReactNode } from 'react'
-import { Factory, FlaskConical, Fuel, Layers3, Mountain, Sparkles, Trash2, Trees, Zap, Flame } from 'lucide-react'
 import { useEpaStore } from '@/lib/store/useEpaStore'
 import { SECTOR_COLORS } from '@/lib/utils/colors'
 

@@ -3,7 +3,7 @@ import type { NextConfig } from 'next'
 const config: NextConfig = {
   reactStrictMode: true,
   images: { unoptimized: false },
-  experimental: { typedRoutes: true },
+  typedRoutes: true,
   async headers() {
     return [
       {

@@ -30,6 +30,8 @@ interface TrendDotProps {
   cx?: number
   cy?: number
   payload?: TrendPoint
+  activeYear: number
+  onYearSelect?: (year: number) => void
 }
 
 function TrendTooltip({
@@ -50,6 +52,30 @@ function TrendTooltip({
   )
 }
 
+function TrendDot({ cx, cy, payload, activeYear, onYearSelect }: TrendDotProps) {
+  if (cx === undefined || cy === undefined || !payload) {
+    return null
+  }
+
+  const isActive = payload.year === activeYear
+
+  return (
+    <g
+      onClick={() => onYearSelect?.(payload.year)}
+      style={{ cursor: onYearSelect ? 'pointer' : 'default' }}
+    >
+      <circle
+        cx={cx}
+        cy={cy}
+        r={isActive ? 5 : 3}
+        fill={isActive ? '#1a5c38' : '#3aad6b'}
+        stroke={isActive ? '#ffffff' : 'none'}
+        strokeWidth={isActive ? 2 : 0}
+      />
+    </g>
+  )
+}
+
 export function TrendChart({
   data = getTrendSeries(dataset),
   activeYear,
@@ -64,30 +90,6 @@ export function TrendChart({
     Object.fromEntries(
       Object.entries(dataset.years).map(([year, yearData]) => [Number(year), yearData.facilities]),
     )
-
-  function TrendDot({ cx, cy, payload }: TrendDotProps) {
-    if (cx === undefined || cy === undefined || !payload) {
-      return null
-    }
-
-    const isActive = payload.year === resolvedActiveYear
-
-    return (
-      <g
-        onClick={() => onYearSelect?.(payload.year)}
-        style={{ cursor: onYearSelect ? 'pointer' : 'default' }}
-      >
-        <circle
-          cx={cx}
-          cy={cy}
-          r={isActive ? 5 : 3}
-          fill={isActive ? '#1a5c38' : '#3aad6b'}
-          stroke={isActive ? '#ffffff' : 'none'}
-          strokeWidth={isActive ? 2 : 0}
-        />
-      </g>
-    )
-  }
 
   return (
     <div
@@ -136,8 +138,8 @@ export function TrendChart({
               stroke="#2d9459"
               strokeWidth={2}
               fill="url(#verdeonTrendFill)"
-              dot={<TrendDot />}
-              activeDot={<TrendDot />}
+              dot={<TrendDot activeYear={resolvedActiveYear} onYearSelect={onYearSelect} />}
+              activeDot={<TrendDot activeYear={resolvedActiveYear} onYearSelect={onYearSelect} />}
             />
           </AreaChart>
         </ResponsiveContainer>

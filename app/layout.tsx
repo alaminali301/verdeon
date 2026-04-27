@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Instrument_Sans, Playfair_Display } from 'next/font/google'
 import { Footer } from '@/components/layout/Footer'
+import { DataNotice } from '@/components/layout/DataNotice'
 import { Navbar } from '@/components/layout/Navbar'
 import { Providers } from '@/components/providers/Providers'
 import './globals.css'
@@ -67,6 +68,7 @@ export default function RootLayout({
       <body className="relative min-h-screen overflow-x-hidden bg-green-50 font-body text-charcoal antialiased">
         <Providers>
           <div className="relative z-10">
+            <DataNotice />
             <Navbar />
             {children}
             <Footer />

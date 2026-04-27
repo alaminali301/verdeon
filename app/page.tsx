@@ -17,9 +17,8 @@ import {
   getSectorBreakdown,
   getStateRanking,
   getTopFacilities,
-  getTrendSeries,
 } from '@/lib/data/selectors'
-import { formatFacilities, formatMt, formatPct } from '@/lib/utils/format'
+import { formatMt, formatPct } from '@/lib/utils/format'
 import { SECTOR_COLORS } from '@/lib/utils/colors'
 
 const MiniBarChart = dynamic(
@@ -42,7 +41,6 @@ type FaqItem = {
 
 const YEARS = Object.keys(data.years).map(Number).sort((a, b) => a - b)
 const DATASET: EpaDataset = data
-const TREND_SERIES = getTrendSeries(DATASET)
 const HERO_YEAR = 2023
 const HERO_DATA = DATASET.years[String(HERO_YEAR)]
 const BASELINE_YEAR = 2010
@@ -208,8 +206,6 @@ export default function Home() {
   const [activeYear, setActiveYear] = useState(HERO_YEAR)
   const [facilityYear, setFacilityYear] = useState(HERO_YEAR)
   const [openFaq, setOpenFaq] = useState(0)
-
-  const activeYearData = DATASET.years[String(activeYear)]
   const activeFacilities = getTopFacilities(DATASET, facilityYear, 10)
   const facilityHighlight = activeFacilities[0]
   const activeStates = getStateRanking(DATASET, HERO_YEAR)

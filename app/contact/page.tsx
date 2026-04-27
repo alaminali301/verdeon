@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { PageWrapper } from '@/components/layout/PageWrapper'
 import { Card } from '@/components/ui/Card'
 
@@ -23,15 +22,10 @@ export default function ContactPage() {
 
         <div className="grid gap-6">
           <Card className="rounded-[24px] p-6 shadow-card">
-            <h2 className="text-lg font-semibold text-green-900">Project source</h2>
+            <h2 className="text-lg font-semibold text-green-900">Feedback and corrections</h2>
             <p className="mt-3 text-sm leading-7 text-muted">
-              Open an issue or review the code on GitHub.
+              Use this page for bugs, feature requests, privacy questions, or corrections to figures and copy.
             </p>
-            <div className="mt-4 flex flex-wrap gap-3">
-              <Link href="https://github.com/alaminali301/verdeon" className="rounded-full border border-green-200 px-4 py-2 text-sm text-green-900 hover:bg-green-50">
-                GitHub repo
-              </Link>
-            </div>
           </Card>
 
           <Card className="rounded-[24px] p-6 shadow-card">

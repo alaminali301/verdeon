@@ -14,6 +14,7 @@ const primaryLinks = [
   { href: '/states', label: 'States' },
   { href: '/compare', label: 'Compare' },
   { href: '/recommendations', label: 'Recommendations' },
+  { href: '/methodology', label: 'Methodology' },
 ] as const
 
 function VerdeonLeafMark() {
@@ -29,7 +30,8 @@ function VerdeonLeafMark() {
 export function Navbar() {
   const pathname = usePathname()
   const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobileOpen, setIsMobileOpen] = useState(false)
+  const [mobileOpenPath, setMobileOpenPath] = useState<string | null>(null)
+  const isMobileOpen = mobileOpenPath === pathname
 
   useEffect(() => {
     function onScroll() {
@@ -40,10 +42,6 @@ export function Navbar() {
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
-
-  useEffect(() => {
-    setIsMobileOpen(false)
-  }, [pathname])
 
   return (
     <header
@@ -89,7 +87,7 @@ export function Navbar() {
           <button
             type="button"
             className="ml-auto inline-flex h-11 w-11 items-center justify-center rounded-full border border-green-200 bg-white text-green-900 md:hidden"
-            onClick={() => setIsMobileOpen((open) => !open)}
+            onClick={() => setMobileOpenPath((current) => (current === pathname ? null : pathname))}
             aria-expanded={isMobileOpen}
             aria-label="Toggle navigation"
           >

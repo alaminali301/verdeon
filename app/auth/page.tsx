@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 
 export const metadata = {
-  title: 'Accounts',
-  description: 'Verdeon account access is not enabled in this launch build.',
+  title: 'Public Access',
+  description: 'Verdeon is launching openly without an account wall.',
 }
 
 export default function AuthPage() {
@@ -19,8 +19,8 @@ export default function AuthPage() {
           </h1>
           <p className="mt-4 text-sm leading-7 text-muted">
             Verdeon is being launched openly so visitors can explore the public EPA data, compare views, and test the upload
-            workflow without creating an account first. Real provider-based authentication can be added later if the product
-            needs it.
+            workflow without creating an account first. If the product later needs accounts, a real provider-based setup can be
+            added then.
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3">
