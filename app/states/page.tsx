@@ -1,17 +1,22 @@
 'use client'
 
+import { Download } from 'lucide-react'
 import { StateGrid } from '@/components/data/StateGrid'
 import { PageWrapper } from '@/components/layout/PageWrapper'
+import { Button } from '@/components/ui/Button'
 import { useEmissionsData } from '@/lib/hooks/useEmissionsData'
 import { useEpaStore } from '@/lib/store/useEpaStore'
 import { getStateRanking } from '@/lib/data/selectors'
+import { downloadCsv } from '@/lib/utils/export'
 
 const YEARS = Array.from({ length: 14 }, (_, index) => 2010 + index)
 
 export default function StatesPage() {
   const data = useEmissionsData()
   const activeYear = useEpaStore((state) => state.activeYear)
+  const activeState = useEpaStore((state) => state.activeState)
   const setActiveYear = useEpaStore((state) => state.setActiveYear)
+  const setActiveState = useEpaStore((state) => state.setActiveState)
   const ranking = getStateRanking(data, activeYear)
   const previousYear = Math.max(activeYear - 1, 2010)
   const previousStates = data.years[String(previousYear)]?.top_states ?? {}
@@ -31,6 +36,21 @@ export default function StatesPage() {
           <p className="mt-4 max-w-2xl text-base leading-7 text-muted">
             Hover a state card to compare the current reporting year with the prior year.
           </p>
+          <div className="mt-5">
+            <Button
+              variant="outline"
+              onClick={() =>
+                downloadCsv(
+                  `verdeon-states-${activeYear}.csv`,
+                  ['rank', 'state', 'emissions_mt', 'yoy_delta_mt'],
+                  items.map((item) => [item.rank, item.state, item.mt.toFixed(2), item.yoyDelta?.toFixed(2) ?? '0']),
+                )
+              }
+            >
+              <Download size={14} />
+              Export state CSV
+            </Button>
+          </div>
         </div>
 
         <div className="mb-8 flex flex-wrap gap-2">
@@ -51,7 +71,7 @@ export default function StatesPage() {
           ))}
         </div>
 
-        <StateGrid items={items} />
+        <StateGrid items={items} activeState={activeState} onSelectState={setActiveState} />
       </PageWrapper>
     </main>
   )

@@ -1,11 +1,14 @@
 'use client'
 
+import { Download } from 'lucide-react'
 import { RecommendationCard } from '@/components/data/RecommendationCard'
 import { PageWrapper } from '@/components/layout/PageWrapper'
+import { Button } from '@/components/ui/Button'
 import { StatCard } from '@/components/ui/StatCard'
 import { sectors } from '@/constants/sectors'
 import { recommendations } from '@/lib/data/recommendations'
 import { useEpaStore } from '@/lib/store/useEpaStore'
+import { downloadJson } from '@/lib/utils/export'
 
 export default function RecommendationsPage() {
   const activeSector = useEpaStore((state) => state.activeSector)
@@ -26,6 +29,21 @@ export default function RecommendationsPage() {
           <h1 className="mt-3 font-display text-[clamp(2.2rem,4vw,3.4rem)] tracking-[-0.03em] text-green-950">
             Reduction strategies by sector
           </h1>
+          <div className="mt-5">
+            <Button
+              variant="outline"
+              onClick={() =>
+                downloadJson(`verdeon-recommendations-${activeSector ?? 'all'}.json`, {
+                  activeSector,
+                  recommendations: filtered,
+                  combinedPotential,
+                })
+              }
+            >
+              <Download size={14} />
+              Export recommendations
+            </Button>
+          </div>
         </div>
 
         <div className="mb-8 flex flex-wrap gap-2">

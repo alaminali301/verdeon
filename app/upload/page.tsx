@@ -15,6 +15,9 @@ interface UploadPreview {
   detectedYear: number | null
   facilityCount: number | null
   sheetName: string
+  rowCount: number
+  columns: string[]
+  sampleRows: Record<string, unknown>[]
 }
 
 function normalizeUploadedDataset(
@@ -64,6 +67,9 @@ function normalizeUploadedDataset(
       detectedYear,
       facilityCount,
       sheetName: firstSheetName,
+      rowCount: rows.length,
+      columns: Object.keys(rows[0] ?? {}).slice(0, 8),
+      sampleRows: rows.slice(0, 3),
     },
   }
 }
@@ -76,15 +82,37 @@ export default function UploadPage() {
   const [preview, setPreview] = useState<UploadPreview | null>(null)
   const [uploadedDataset, setDataset] = useState<EpaDataset | null>(null)
   const [status, setStatus] = useState<string>('Drop an EPA workbook, CSV, or zipped export to preview it.')
+  const [error, setError] = useState<string | null>(null)
+  const [progress, setProgress] = useState<number>(0)
 
   async function handleFile(file: File) {
-    setStatus('Parsing file…')
-    const arrayBuffer = await file.arrayBuffer()
-    const workbook = XLSX.read(arrayBuffer, { type: 'array' })
-    const result = normalizeUploadedDataset(workbook, file.name)
-    setPreview(result.preview)
-    setDataset(result.dataset)
-    setStatus('Preview ready.')
+    setError(null)
+    setProgress(15)
+    setStatus('Reading file…')
+
+    if (file.name.toLowerCase().endsWith('.zip')) {
+      setProgress(100)
+      setError('ZIP preview is not enabled in this build yet. Use the extracted .xlsx or .csv file instead.')
+      setStatus('Upload a workbook or CSV to continue.')
+      return
+    }
+
+    try {
+      const arrayBuffer = await file.arrayBuffer()
+      setProgress(45)
+      setStatus('Parsing workbook…')
+      const workbook = XLSX.read(arrayBuffer, { type: 'array' })
+      setProgress(80)
+      const result = normalizeUploadedDataset(workbook, file.name)
+      setPreview(result.preview)
+      setDataset(result.dataset)
+      setProgress(100)
+      setStatus('Preview ready.')
+    } catch (uploadError) {
+      setProgress(100)
+      setError(uploadError instanceof Error ? uploadError.message : 'Unable to parse that file.')
+      setStatus('Upload another file to retry.')
+    }
   }
 
   return (
@@ -138,6 +166,13 @@ export default function UploadPage() {
           />
 
           <p className="mt-5 text-sm text-muted">{status}</p>
+          <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-green-100">
+            <div
+              className="h-full rounded-full bg-green-600 transition-all duration-300"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+          {error ? <p className="mt-3 text-sm text-red-700">{error}</p> : null}
 
           {preview ? (
             <div className="mt-8 rounded-[18px] border border-green-100 bg-green-50 p-5">
@@ -157,6 +192,34 @@ export default function UploadPage() {
                 </div>
               </div>
               <div className="mt-4 text-sm text-muted">Worksheet: {preview.sheetName}</div>
+              <div className="mt-2 text-sm text-muted">Rows parsed: {preview.rowCount}</div>
+              <div className="mt-2 text-sm text-muted">
+                Columns: {preview.columns.join(', ') || 'No headers detected'}
+              </div>
+              <div className="mt-4 overflow-x-auto rounded-[14px] border border-green-100 bg-white">
+                <table className="min-w-full text-left text-xs">
+                  <thead className="bg-green-900 text-white">
+                    <tr>
+                      {preview.columns.map((column) => (
+                        <th key={column} className="px-3 py-2 font-medium">
+                          {column}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {preview.sampleRows.map((row, index) => (
+                      <tr key={index} className="border-t border-green-100">
+                        {preview.columns.map((column) => (
+                          <td key={column} className="px-3 py-2 text-green-900">
+                            {String(row[column] ?? '')}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
               <div className="mt-6">
                 <Button
                   onClick={() => {

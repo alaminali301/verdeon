@@ -7,9 +7,15 @@ export interface FacilityRow {
 
 export interface FacilityTableProps {
   rows: FacilityRow[]
+  activeFacility?: string | null
+  onSelectFacility?: (facilityName: string) => void
 }
 
-export function FacilityTable({ rows }: FacilityTableProps) {
+export function FacilityTable({
+  rows,
+  activeFacility,
+  onSelectFacility,
+}: FacilityTableProps) {
   return (
     <div className="overflow-hidden rounded-[20px] border border-green-100 bg-white shadow-card">
       <table className="w-full border-collapse">
@@ -22,7 +28,13 @@ export function FacilityTable({ rows }: FacilityTableProps) {
         </thead>
         <tbody>
           {rows.map((facility, index) => (
-            <tr key={`${facility.name}-${index}`} className="border-t border-green-100">
+            <tr
+              key={`${facility.name}-${index}`}
+              className={[
+                'border-t border-green-100 transition-colors',
+                activeFacility === facility.name ? 'bg-green-50' : 'hover:bg-green-50/60',
+              ].join(' ')}
+            >
               <td className="px-5 py-4">
                 <span
                   className={[
@@ -33,7 +45,15 @@ export function FacilityTable({ rows }: FacilityTableProps) {
                   {index + 1}
                 </span>
               </td>
-              <td className="px-5 py-4 text-sm text-green-900">{facility.name}</td>
+              <td className="px-5 py-4 text-sm text-green-900">
+                <button
+                  type="button"
+                  onClick={() => onSelectFacility?.(facility.name)}
+                  className="text-left underline-offset-4 hover:underline"
+                >
+                  {facility.name}
+                </button>
+              </td>
               <td className="px-5 py-4 text-sm text-muted">{formatMt(facility.mt)}</td>
             </tr>
           ))}

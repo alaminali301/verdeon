@@ -80,8 +80,12 @@ export function Navbar() {
           </nav>
 
           <div className="ml-auto hidden items-center gap-3 md:flex">
-            <Button variant="outline">Sign in</Button>
-            <Button>Get started</Button>
+            <Link href="/upload">
+              <Button variant="outline">Sign in free</Button>
+            </Link>
+            <Link href="/upload">
+              <Button>Sign up free</Button>
+            </Link>
           </div>
 
           <button
@@ -114,8 +118,14 @@ export function Navbar() {
               ))}
             </nav>
             <div className="mt-4 flex flex-col gap-2">
-              <Button variant="outline">Sign in</Button>
-              <Button>Get started</Button>
+              <Link href="/upload">
+                <Button variant="outline" className="w-full justify-center">
+                  Sign in free
+                </Button>
+              </Link>
+              <Link href="/upload">
+                <Button className="w-full justify-center">Sign up free</Button>
+              </Link>
             </div>
           </div>
         ) : null}

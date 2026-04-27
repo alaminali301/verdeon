@@ -154,26 +154,26 @@ const FAQS: FaqItem[] = [
 ]
 const PRICING_TIERS = [
   {
-    name: 'Starter',
+    name: 'Free',
     price: '$0',
-    period: 'Free forever',
-    cta: 'Get started free',
+    period: 'Sign up and start immediately',
+    cta: 'Sign up free',
     featured: false,
     features: [
-      '2023 EPA data (latest year)',
-      'Sector & state breakdowns',
-      '3 downloadable reports/month',
-      'Basic reduction recommendations',
+      'Full 2010–2023 historical data',
+      'Sector, state, and facility breakdowns',
+      'Interactive dashboards and uploads',
+      'Reduction recommendations included',
     ],
   },
   {
-    name: 'Pro',
-    price: '$49',
-    period: 'per month · billed annually',
-    cta: 'Start Pro trial',
+    name: 'Teams',
+    price: '$0',
+    period: 'Free during beta',
+    cta: 'Create team workspace',
     featured: true,
     features: [
-      'Full 2010–2023 historical data',
+      'Shared dashboards and saved views',
       'All 8 EPA sector categories',
       'Facility-level drill-down',
       'State-level geographic maps',
@@ -182,13 +182,13 @@ const PRICING_TIERS = [
     ],
   },
   {
-    name: 'Enterprise',
+    name: 'Enterprise support',
     price: 'Custom',
-    period: 'Contact us',
-    cta: 'Talk to sales',
+    period: 'Optional services',
+    cta: 'Contact us',
     featured: false,
     features: [
-      'Everything in Pro',
+      'Everything in free access',
       'API access & data exports',
       'Custom data integrations',
       'Dedicated sustainability analyst',
@@ -281,7 +281,7 @@ export default function Home() {
                 </p>
                 <div className="mt-8 flex flex-wrap gap-4">
                   <Link href="#cta">
-                    <Button className="px-6 py-3.5">Start for free</Button>
+                    <Button className="px-6 py-3.5">Sign up free</Button>
                   </Link>
                   <Link href="#data">
                     <Button variant="outline" className="px-6 py-3.5">
@@ -757,7 +757,7 @@ export default function Home() {
                 Upload your EPA GHGRP files and get your first real insights in minutes. Free to start, no credit card needed.
               </p>
               <div className="mt-10 flex flex-wrap justify-center gap-4">
-                <Button className="bg-green-500 text-green-950 hover:bg-green-400">Get started free</Button>
+                <Button className="bg-green-500 text-green-950 hover:bg-green-400">Sign up free</Button>
                 <Link href="#data">
                   <Button variant="ghost">Explore the data</Button>
                 </Link>

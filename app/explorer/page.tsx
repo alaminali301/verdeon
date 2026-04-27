@@ -2,15 +2,18 @@
 
 import dynamic from 'next/dynamic'
 import { useState } from 'react'
+import { Download } from 'lucide-react'
 import { ChartSkeleton } from '@/components/charts/ChartSkeleton'
 import { SectorList } from '@/components/data/SectorList'
 import { PageWrapper } from '@/components/layout/PageWrapper'
+import { Button } from '@/components/ui/Button'
 import { StatCard } from '@/components/ui/StatCard'
 import { useEmissionsData } from '@/lib/hooks/useEmissionsData'
 import { useEpaStore } from '@/lib/store/useEpaStore'
 import { sectors } from '@/constants/sectors'
 import { getSectorBreakdown, getStateRanking } from '@/lib/data/selectors'
 import { formatMt } from '@/lib/utils/format'
+import { downloadJson } from '@/lib/utils/export'
 
 const SectorBarChart = dynamic(
   () => import('@/components/charts/SectorBarChart').then((mod) => mod.SectorBarChart),
@@ -27,8 +30,10 @@ export default function ExplorerPage() {
   const data = useEmissionsData()
   const activeYear = useEpaStore((state) => state.activeYear)
   const activeSector = useEpaStore((state) => state.activeSector)
+  const activeState = useEpaStore((state) => state.activeState)
   const setActiveYear = useEpaStore((state) => state.setActiveYear)
   const setActiveSector = useEpaStore((state) => state.setActiveSector)
+  const setActiveState = useEpaStore((state) => state.setActiveState)
   const [showStates, setShowStates] = useState(false)
 
   const yearData = data.years[String(activeYear)]
@@ -46,6 +51,23 @@ export default function ExplorerPage() {
           <h1 className="mt-3 font-display text-[clamp(2.2rem,4vw,3.4rem)] tracking-[-0.03em] text-green-950">
             Slice 14 years of EPA data by year and sector
           </h1>
+          <div className="mt-5">
+            <Button
+              variant="outline"
+              onClick={() =>
+                downloadJson(`verdeon-explorer-${activeYear}.json`, {
+                  year: activeYear,
+                  activeSector,
+                  activeState,
+                  sectors: allSectors,
+                  states,
+                })
+              }
+            >
+              <Download size={14} />
+              Export filtered view
+            </Button>
+          </div>
         </div>
 
         <div className="flex flex-wrap gap-2">
@@ -122,9 +144,13 @@ export default function ExplorerPage() {
               <div className="mt-4 space-y-3">
                 {states.map((state) => (
                   <div key={state.state} className="flex items-center justify-between rounded-[14px] bg-green-50 px-4 py-3">
-                    <span className="text-sm font-medium text-green-900">
+                    <button
+                      type="button"
+                      onClick={() => setActiveState(activeState === state.state ? null : state.state)}
+                      className="text-sm font-medium text-green-900 underline-offset-4 hover:underline"
+                    >
                       #{state.rank} {state.state}
-                    </span>
+                    </button>
                     <span className="text-sm text-muted">{formatMt(state.mt)}</span>
                   </div>
                 ))}
