@@ -85,29 +85,6 @@ const HOW_ITEMS = [
       "Verdeon's recommendation engine identifies your highest-impact reduction opportunities and surfaces concrete, prioritised strategies ranked by CO₂e savings potential.",
   },
 ]
-const TESTIMONIALS = [
-  {
-    initials: 'MR',
-    name: 'Maya Rodriguez',
-    role: 'VP Sustainability, Aldren Manufacturing',
-    quote:
-      'Verdeon cut our EPA data prep from two weeks to an afternoon. Seeing Texas at 380 Mt — 16% of all US reported emissions — made our board act immediately.',
-  },
-  {
-    initials: 'JK',
-    name: 'James Kim',
-    role: 'Director of ESG, Crestfield Energy',
-    quote:
-      'The 25% reduction since 2010 gave us a credible baseline for our 2030 targets. Knowing power plants drove that decline helped us benchmark our sector realistically.',
-  },
-  {
-    initials: 'AL',
-    name: 'Amara Levi',
-    role: 'Climate Strategy Lead, Novara Chemical',
-    quote:
-      'Power plants at 59% of total — that one real number from Verdeon restructured our entire advocacy strategy. We stopped generalising and started targeting.',
-  },
-]
 const FAQS: FaqItem[] = [
   {
     question: 'What EPA data does Verdeon actually use?',
@@ -152,47 +129,32 @@ const FAQS: FaqItem[] = [
       'API access is on the Enterprise plan — REST endpoints for querying aggregated emissions data, running calculations, and retrieving recommendations programmatically.',
   },
 ]
-const PRICING_TIERS = [
+const VERDEON_CAPABILITIES = [
   {
-    name: 'Free',
-    price: '$0',
-    period: 'Sign up and start immediately',
-    cta: 'Sign up free',
-    featured: false,
+    title: 'Explore national trends',
+    eyebrow: '14-year timeline',
     features: [
-      'Full 2010–2023 historical data',
-      'Sector, state, and facility breakdowns',
-      'Interactive dashboards and uploads',
-      'Reduction recommendations included',
+      'Compare 2010 through 2023 reported emissions in one place',
+      'Track sector shifts, state rankings, and total reductions over time',
+      'Use interactive year switching across charts and data tables',
     ],
   },
   {
-    name: 'Teams',
-    price: '$0',
-    period: 'Free during beta',
-    cta: 'Create team workspace',
-    featured: true,
+    title: 'Drill into facilities and states',
+    eyebrow: 'Real facility data',
     features: [
-      'Shared dashboards and saved views',
-      'All 8 EPA sector categories',
-      'Facility-level drill-down',
-      'State-level geographic maps',
-      'Unlimited report exports',
-      'Priority reduction engine',
+      'Review top emitters by year with ranked facility tables',
+      'Inspect state-by-state totals and year-over-year changes',
+      'Keep filters synced across the dashboard, explorer, and rankings pages',
     ],
   },
   {
-    name: 'Enterprise support',
-    price: 'Custom',
-    period: 'Optional services',
-    cta: 'Contact us',
-    featured: false,
+    title: 'Upload, compare, and export',
+    eyebrow: 'Interactive workflow',
     features: [
-      'Everything in free access',
-      'API access & data exports',
-      'Custom data integrations',
-      'Dedicated sustainability analyst',
-      'SSO & compliance reporting',
+      'Preview uploaded EPA-style workbooks before applying them',
+      'Export filtered snapshots, state rankings, facilities, and recommendations',
+      'Generate reduction strategy views tied to sector-specific opportunities',
     ],
   },
 ] as const
@@ -281,7 +243,7 @@ export default function Home() {
                 </p>
                 <div className="mt-8 flex flex-wrap gap-4">
                   <Link href="#cta">
-                    <Button className="px-6 py-3.5">Sign up free</Button>
+                    <Button className="px-6 py-3.5">Sign up</Button>
                   </Link>
                   <Link href="#data">
                     <Button variant="outline" className="px-6 py-3.5">
@@ -301,9 +263,9 @@ export default function Home() {
                     ))}
                   </div>
                   <p className="text-sm leading-6 text-muted">
-                    <strong className="text-green-900">500+ sustainability teams</strong>
+                    <strong className="text-green-900">Built for sustainability teams</strong>
                     <br />
-                    track emissions with Verdeon
+                    exploring EPA emissions data
                   </p>
                 </div>
               </FadeIn>
@@ -616,81 +578,30 @@ export default function Home() {
           </PageWrapper>
         </section>
 
-        <section id="pricing" className="px-6 py-20">
+        <section id="capabilities" className="px-6 py-20">
           <PageWrapper>
             <SectionHeader
-              eyebrow="Pricing"
-              title="Simple, transparent pricing"
-              description="Start free and scale with your team. All plans include access to the full EPA GHGRP dataset."
+              eyebrow="What you can do in Verdeon"
+              title="A better way to work with EPA emissions data"
+              description="Verdeon is designed to help you move from raw reporting files to usable analysis, comparisons, and exports without fighting spreadsheets."
               align="center"
             />
             <div className="mt-10 grid gap-6 lg:grid-cols-3">
-              {PRICING_TIERS.map((tier, index) => (
-                <FadeIn key={tier.name} delay={index * 100}>
-                  <Card
-                    className={[
-                      'relative h-full rounded-[24px] p-6',
-                      tier.featured ? 'border-green-700 bg-green-900 text-white shadow-lift' : '',
-                    ].join(' ')}
-                  >
-                    {tier.featured ? (
-                      <div className="absolute right-6 top-6 rounded-full bg-green-500 px-3 py-1 text-[0.72rem] font-semibold uppercase tracking-[0.08em] text-green-950">
-                        Most popular
-                      </div>
-                    ) : null}
-                    <div className={tier.featured ? 'text-green-300' : 'text-green-600'}>{tier.name}</div>
-                    <div
-                      className={[
-                        'mt-4 font-display text-[3rem] leading-none tracking-[-0.03em]',
-                        tier.featured ? 'text-white' : 'text-green-950',
-                      ].join(' ')}
-                    >
-                      {tier.price}
-                    </div>
-                    <div className={['mt-2 text-sm', tier.featured ? 'text-green-200' : 'text-muted'].join(' ')}>
-                      {tier.period}
+              {VERDEON_CAPABILITIES.map((capability, index) => (
+                <FadeIn key={capability.title} delay={index * 100}>
+                  <Card className="relative h-full rounded-[24px] p-6">
+                    <div className="text-green-600">{capability.eyebrow}</div>
+                    <div className="mt-4 font-display text-[2rem] leading-none tracking-[-0.03em] text-green-950">
+                      {capability.title}
                     </div>
                     <ul className="mt-6 space-y-3">
-                      {tier.features.map((feature) => (
-                        <li
-                          key={feature}
-                          className={['flex items-start gap-3 text-sm', tier.featured ? 'text-green-100' : 'text-muted'].join(' ')}
-                        >
-                          <span className={tier.featured ? 'text-green-300' : 'text-green-600'}>✓</span>
+                      {capability.features.map((feature) => (
+                        <li key={feature} className="flex items-start gap-3 text-sm text-muted">
+                          <span className="text-green-600">✓</span>
                           <span>{feature}</span>
                         </li>
                       ))}
                     </ul>
-                    <div className="mt-8">
-                      <Button variant={tier.featured ? 'ghost' : 'solid'} className="w-full justify-center">
-                        {tier.cta}
-                      </Button>
-                    </div>
-                  </Card>
-                </FadeIn>
-              ))}
-            </div>
-          </PageWrapper>
-        </section>
-
-        <section id="testi" className="bg-green-50 px-6 py-20">
-          <PageWrapper>
-            <SectionHeader eyebrow="Testimonials" title="Trusted by sustainability teams" align="center" />
-            <div className="mt-10 grid gap-6 lg:grid-cols-3">
-              {TESTIMONIALS.map((testimonial, index) => (
-                <FadeIn key={testimonial.name} delay={index * 100}>
-                  <Card className="h-full rounded-[24px] p-6">
-                    <div className="text-amber-500">★★★★★</div>
-                    <p className="mt-4 text-[1rem] leading-8 text-green-900">{testimonial.quote}</p>
-                    <div className="mt-6 flex items-center gap-3">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-100 font-semibold text-green-900">
-                        {testimonial.initials}
-                      </div>
-                      <div>
-                        <div className="font-medium text-green-900">{testimonial.name}</div>
-                        <div className="text-sm text-muted">{testimonial.role}</div>
-                      </div>
-                    </div>
                   </Card>
                 </FadeIn>
               ))}
@@ -757,7 +668,7 @@ export default function Home() {
                 Upload your EPA GHGRP files and get your first real insights in minutes. Free to start, no credit card needed.
               </p>
               <div className="mt-10 flex flex-wrap justify-center gap-4">
-                <Button className="bg-green-500 text-green-950 hover:bg-green-400">Sign up free</Button>
+                <Button className="bg-green-500 text-green-950 hover:bg-green-400">Sign up</Button>
                 <Link href="#data">
                   <Button variant="ghost">Explore the data</Button>
                 </Link>

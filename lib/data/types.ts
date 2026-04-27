@@ -28,6 +28,12 @@ export interface SectorBreakdownItem {
   color: string
 }
 
+export interface YearValuePoint {
+  year: number
+  value: number
+  rank: number | null
+}
+
 export interface Recommendation {
   id: string
   priority: 'HIGH' | 'MEDIUM' | 'LOW'

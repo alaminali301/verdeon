@@ -1,4 +1,6 @@
+import Link from 'next/link'
 import { formatMt } from '@/lib/utils/format'
+import { slugifyLabel } from '@/lib/utils/slug'
 
 export interface FacilityRow {
   name: string
@@ -46,13 +48,21 @@ export function FacilityTable({
                 </span>
               </td>
               <td className="px-5 py-4 text-sm text-green-900">
-                <button
-                  type="button"
-                  onClick={() => onSelectFacility?.(facility.name)}
-                  className="text-left underline-offset-4 hover:underline"
-                >
-                  {facility.name}
-                </button>
+                <div className="flex flex-col items-start gap-1">
+                  <button
+                    type="button"
+                    onClick={() => onSelectFacility?.(facility.name)}
+                    className="text-left underline-offset-4 hover:underline"
+                  >
+                    {facility.name}
+                  </button>
+                  <Link
+                    href={`/facilities/${slugifyLabel(facility.name)}`}
+                    className="text-xs font-medium text-green-700 underline-offset-4 hover:underline"
+                  >
+                    View details
+                  </Link>
+                </div>
               </td>
               <td className="px-5 py-4 text-sm text-muted">{formatMt(facility.mt)}</td>
             </tr>

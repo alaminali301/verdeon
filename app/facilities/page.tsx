@@ -1,11 +1,14 @@
 'use client'
 
+import { useDeferredValue, useState } from 'react'
 import { Download } from 'lucide-react'
+import { PreviewGate } from '@/components/auth/PreviewGate'
 import { FacilityTable } from '@/components/data/FacilityTable'
 import { PageWrapper } from '@/components/layout/PageWrapper'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { useEmissionsData } from '@/lib/hooks/useEmissionsData'
+import { useAuthStore } from '@/lib/store/useAuthStore'
 import { useEpaStore } from '@/lib/store/useEpaStore'
 import { getTopFacilities } from '@/lib/data/selectors'
 import { downloadCsv } from '@/lib/utils/export'
@@ -14,12 +17,18 @@ const YEARS = Array.from({ length: 14 }, (_, index) => 2023 - index)
 
 export default function FacilitiesPage() {
   const data = useEmissionsData()
+  const currentUser = useAuthStore((state) => state.currentUser)
   const activeYear = useEpaStore((state) => state.activeYear)
   const selectedFacility = useEpaStore((state) => state.selectedFacility)
   const setActiveYear = useEpaStore((state) => state.setActiveYear)
   const setSelectedFacility = useEpaStore((state) => state.setSelectedFacility)
   const facilities = getTopFacilities(data, activeYear, 10)
-  const topFacility = facilities.find((facility) => facility.name === selectedFacility) ?? facilities[0]
+  const [search, setSearch] = useState('')
+  const deferredSearch = useDeferredValue(search)
+  const filteredFacilities = facilities.filter((facility) =>
+    facility.name.toLowerCase().includes(deferredSearch.toLowerCase()),
+  )
+  const topFacility = filteredFacilities.find((facility) => facility.name === selectedFacility) ?? filteredFacilities[0] ?? facilities[0]
 
   return (
     <main className="px-6 py-12 pt-28">
@@ -50,6 +59,7 @@ export default function FacilitiesPage() {
         <div className="mb-5">
           <Button
             variant="outline"
+            disabled={!currentUser}
             onClick={() =>
               downloadCsv(
                 `verdeon-facilities-${activeYear}.csv`,
@@ -61,6 +71,25 @@ export default function FacilitiesPage() {
             <Download size={14} />
             Export ranking CSV
           </Button>
+          {!currentUser ? (
+            <p className="mt-3 text-sm text-muted">Exports stay locked in preview mode, but you can still inspect the ranking and switch years.</p>
+          ) : null}
+        </div>
+
+        <div className="mb-8">
+          <PreviewGate compact description="Create an account to export facility rankings, upload your own workbook, and keep your analysis session." />
+        </div>
+
+        <div className="mb-6">
+          <label className="block">
+            <span className="mb-2 block text-sm font-medium text-green-900">Search facilities</span>
+            <input
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder="Search top emitters in the selected year"
+              className="w-full rounded-[16px] border border-green-200 bg-white px-4 py-3 text-sm text-green-900 outline-none focus:border-green-600"
+            />
+          </label>
         </div>
 
         <Card featured className="mb-8 rounded-[24px] p-8 shadow-lift">
@@ -75,7 +104,7 @@ export default function FacilitiesPage() {
         </Card>
 
         <FacilityTable
-          rows={facilities}
+          rows={filteredFacilities}
           activeFacility={topFacility?.name}
           onSelectFacility={setSelectedFacility}
         />
