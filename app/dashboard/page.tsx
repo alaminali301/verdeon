@@ -8,7 +8,6 @@ import { PageWrapper } from '@/components/layout/PageWrapper'
 import { Button } from '@/components/ui/Button'
 import { StatCard } from '@/components/ui/StatCard'
 import { useEmissionsData } from '@/lib/hooks/useEmissionsData'
-import { useAuthStore } from '@/lib/store/useAuthStore'
 import { useYearComparison } from '@/lib/hooks/useYearComparison'
 import { useEpaStore } from '@/lib/store/useEpaStore'
 import { getSectorBreakdown, getStateRanking } from '@/lib/data/selectors'
@@ -28,7 +27,6 @@ const YEARS = Array.from({ length: 14 }, (_, index) => 2010 + index)
 
 export default function DashboardPage() {
   const data = useEmissionsData()
-  const currentUser = useAuthStore((state) => state.currentUser)
   const activeYear = useEpaStore((state) => state.activeYear)
   const activeState = useEpaStore((state) => state.activeState)
   const setActiveYear = useEpaStore((state) => state.setActiveYear)
@@ -54,7 +52,6 @@ export default function DashboardPage() {
           <div className="mt-5 flex flex-wrap gap-3">
             <Button
               variant="outline"
-              disabled={!currentUser}
               onClick={() =>
                 downloadCsv(
                   `verdeon-dashboard-${activeYear}.csv`,
@@ -73,7 +70,6 @@ export default function DashboardPage() {
             </Button>
             <Button
               variant="outline"
-              disabled={!currentUser}
               onClick={() =>
                 downloadJson(`verdeon-dashboard-${activeYear}.json`, {
                   year: activeYear,
@@ -87,9 +83,6 @@ export default function DashboardPage() {
               Export snapshot JSON
             </Button>
           </div>
-          {!currentUser ? (
-            <p className="mt-3 text-sm text-muted">Exports are unlocked after sign-in. The rest of the dashboard stays open for preview.</p>
-          ) : null}
         </div>
 
         <div className="mb-8">

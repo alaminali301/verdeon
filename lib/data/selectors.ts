@@ -1,5 +1,11 @@
 import { SECTOR_COLORS } from '@/lib/utils/colors'
-import type { EpaDataset, EpaYearData, SectorBreakdownItem, YearValuePoint } from '@/lib/data/types'
+import type {
+  EpaDataset,
+  EpaYearData,
+  FacilityRankingItem,
+  SectorBreakdownItem,
+  YearValuePoint,
+} from '@/lib/data/types'
 
 function getYearData(data: EpaDataset, year: number): EpaYearData {
   const yearData = data.years[String(year)]
@@ -51,6 +57,10 @@ export function getTopFacilities(data: EpaDataset, year: number, n = 10) {
     .slice()
     .sort((a, b) => b.mt - a.mt)
     .slice(0, n)
+    .map((facility, index) => ({
+      ...facility,
+      rank: index + 1,
+    })) as FacilityRankingItem[]
 }
 
 export function getStateRanking(data: EpaDataset, year: number) {
@@ -112,6 +122,25 @@ export function getStateHistory(data: EpaDataset, state: string): YearValuePoint
         .map(([name, mt]) => ({ state: name, mt }))
         .sort((a, b) => b.mt - a.mt)
       const rank = ranking.findIndex((entry) => entry.state === state)
+      const row = ranking[rank]
+
+      return {
+        year: Number(year),
+        value: row?.mt ?? 0,
+        rank: rank === -1 ? null : rank + 1,
+      }
+    })
+    .filter((point) => point.value > 0)
+    .sort((a, b) => a.year - b.year)
+}
+
+export function getSectorHistory(data: EpaDataset, sector: string): YearValuePoint[] {
+  return Object.entries(data.years)
+    .map(([year, yearData]) => {
+      const ranking = Object.entries(yearData.sectors)
+        .map(([name, mt]) => ({ name, mt }))
+        .sort((a, b) => b.mt - a.mt)
+      const rank = ranking.findIndex((entry) => entry.name === sector)
       const row = ranking[rank]
 
       return {

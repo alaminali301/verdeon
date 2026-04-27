@@ -1,12 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import { ChevronDown, Menu, X } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { Menu, X } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 import { PageWrapper } from '@/components/layout/PageWrapper'
-import { useAuthStore } from '@/lib/store/useAuthStore'
 
 const primaryLinks = [
   { href: '/dashboard', label: 'Dashboard' },
@@ -30,13 +29,8 @@ function VerdeonLeafMark() {
 
 export function Navbar() {
   const pathname = usePathname()
-  const hasHydrated = useAuthStore((state) => state.hasHydrated)
-  const currentUser = useAuthStore((state) => state.currentUser)
-  const signOut = useAuthStore((state) => state.signOut)
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileOpen, setIsMobileOpen] = useState(false)
-  const [isProfileOpen, setIsProfileOpen] = useState(false)
-  const profileRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     function onScroll() {
@@ -50,19 +44,7 @@ export function Navbar() {
 
   useEffect(() => {
     setIsMobileOpen(false)
-    setIsProfileOpen(false)
   }, [pathname])
-
-  useEffect(() => {
-    function onPointerDown(event: MouseEvent) {
-      if (!profileRef.current?.contains(event.target as Node)) {
-        setIsProfileOpen(false)
-      }
-    }
-
-    window.addEventListener('mousedown', onPointerDown)
-    return () => window.removeEventListener('mousedown', onPointerDown)
-  }, [])
 
   return (
     <header
@@ -100,53 +82,12 @@ export function Navbar() {
           </nav>
 
           <div className="ml-auto hidden items-center gap-3 md:flex">
-            <div className="rounded-full border border-green-100 bg-green-50 px-3 py-1 text-[0.72rem] font-semibold uppercase tracking-[0.08em] text-green-700">
-              Demo auth
-            </div>
-            {hasHydrated && currentUser ? (
-              <div className="relative" ref={profileRef}>
-                <button
-                  type="button"
-                  onClick={() => setIsProfileOpen((value) => !value)}
-                  className="inline-flex items-center gap-2 rounded-full border border-green-200 bg-white px-4 py-2 text-sm text-green-900"
-                  aria-expanded={isProfileOpen}
-                  aria-label="Open account menu"
-                >
-                  <span className="font-medium">{currentUser.name}</span>
-                  <ChevronDown size={16} className={isProfileOpen ? 'rotate-180 transition-transform' : 'transition-transform'} />
-                </button>
-                {isProfileOpen ? (
-                  <div className="absolute right-0 top-[calc(100%+10px)] w-64 rounded-[18px] border border-green-100 bg-white p-4 shadow-lift">
-                    <div className="text-sm font-medium text-green-900">{currentUser.name}</div>
-                    <div className="mt-1 text-sm text-muted">{currentUser.email}</div>
-                    <div className="mt-4 flex flex-col gap-2">
-                      <Link href="/dashboard" className="rounded-full px-3 py-2 text-sm text-green-900 hover:bg-green-50">
-                        Dashboard
-                      </Link>
-                      <Link href="/upload" className="rounded-full px-3 py-2 text-sm text-green-900 hover:bg-green-50">
-                        Upload data
-                      </Link>
-                      <button
-                        type="button"
-                        onClick={signOut}
-                        className="rounded-full px-3 py-2 text-left text-sm text-green-900 hover:bg-green-50"
-                      >
-                        Sign out
-                      </button>
-                    </div>
-                  </div>
-                ) : null}
-              </div>
-            ) : (
-              <>
-                <Link href="/auth?mode=signin">
-                  <Button variant="outline">Sign in</Button>
-                </Link>
-                <Link href="/auth?mode=signup">
-                  <Button>Sign up</Button>
-                </Link>
-              </>
-            )}
+            <Link href="/methodology">
+              <Button variant="outline">Methodology</Button>
+            </Link>
+            <Link href="/upload">
+              <Button>Upload data</Button>
+            </Link>
           </div>
 
           <button
@@ -179,30 +120,14 @@ export function Navbar() {
               ))}
             </nav>
             <div className="mt-4 flex flex-col gap-2">
-              <div className="rounded-[14px] border border-green-100 bg-green-50 px-4 py-3 text-xs font-semibold uppercase tracking-[0.08em] text-green-700">
-                Demo auth
-              </div>
-              {hasHydrated && currentUser ? (
-                <>
-                  <div className="rounded-[14px] border border-green-100 bg-green-50 px-4 py-3 text-sm text-green-900">
-                    Signed in as <span className="font-medium">{currentUser.name}</span>
-                  </div>
-                  <Button variant="outline" className="w-full justify-center" onClick={signOut}>
-                    Sign out
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Link href="/auth?mode=signin">
-                    <Button variant="outline" className="w-full justify-center">
-                      Sign in
-                    </Button>
-                  </Link>
-                  <Link href="/auth?mode=signup">
-                    <Button className="w-full justify-center">Sign up</Button>
-                  </Link>
-                </>
-              )}
+              <Link href="/methodology">
+                <Button variant="outline" className="w-full justify-center">
+                  Methodology
+                </Button>
+              </Link>
+              <Link href="/upload">
+                <Button className="w-full justify-center">Upload data</Button>
+              </Link>
             </div>
           </div>
         ) : null}

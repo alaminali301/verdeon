@@ -8,7 +8,6 @@ import { PageWrapper } from '@/components/layout/PageWrapper'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { useEmissionsData } from '@/lib/hooks/useEmissionsData'
-import { useAuthStore } from '@/lib/store/useAuthStore'
 import { useEpaStore } from '@/lib/store/useEpaStore'
 import { getTopFacilities } from '@/lib/data/selectors'
 import { downloadCsv } from '@/lib/utils/export'
@@ -17,7 +16,6 @@ const YEARS = Array.from({ length: 14 }, (_, index) => 2023 - index)
 
 export default function FacilitiesPage() {
   const data = useEmissionsData()
-  const currentUser = useAuthStore((state) => state.currentUser)
   const activeYear = useEpaStore((state) => state.activeYear)
   const selectedFacility = useEpaStore((state) => state.selectedFacility)
   const setActiveYear = useEpaStore((state) => state.setActiveYear)
@@ -28,7 +26,8 @@ export default function FacilitiesPage() {
   const filteredFacilities = facilities.filter((facility) =>
     facility.name.toLowerCase().includes(deferredSearch.toLowerCase()),
   )
-  const topFacility = filteredFacilities.find((facility) => facility.name === selectedFacility) ?? filteredFacilities[0] ?? facilities[0]
+  const selectedFacilityRow =
+    facilities.find((facility) => facility.name === selectedFacility) ?? filteredFacilities[0] ?? facilities[0]
 
   return (
     <main className="px-6 py-12 pt-28">
@@ -59,25 +58,21 @@ export default function FacilitiesPage() {
         <div className="mb-5">
           <Button
             variant="outline"
-            disabled={!currentUser}
             onClick={() =>
               downloadCsv(
                 `verdeon-facilities-${activeYear}.csv`,
                 ['rank', 'facility', 'emissions_mt'],
-                facilities.map((facility, index) => [index + 1, facility.name, facility.mt.toFixed(3)]),
+                facilities.map((facility) => [facility.rank, facility.name, facility.mt.toFixed(3)]),
               )
             }
           >
             <Download size={14} />
             Export ranking CSV
           </Button>
-          {!currentUser ? (
-            <p className="mt-3 text-sm text-muted">Exports stay locked in preview mode, but you can still inspect the ranking and switch years.</p>
-          ) : null}
         </div>
 
         <div className="mb-8">
-          <PreviewGate compact description="Create an account to export facility rankings, upload your own workbook, and keep your analysis session." />
+          <PreviewGate compact description="Inspect facility rankings, export the table, and compare years in the public view." />
         </div>
 
         <div className="mb-6">
@@ -93,19 +88,25 @@ export default function FacilitiesPage() {
         </div>
 
         <Card featured className="mb-8 rounded-[24px] p-8 shadow-lift">
-          <div className="text-[0.75rem] uppercase tracking-[0.08em] text-green-300">{activeYear} · #1 emitter</div>
+          <div className="text-[0.75rem] uppercase tracking-[0.08em] text-green-300">
+            {activeYear} · {selectedFacility ? `#${selectedFacilityRow?.rank ?? 1} selected` : '#1 current leader'}
+          </div>
           <h2 className="mt-4 font-display text-[clamp(2.3rem,5vw,3.4rem)] tracking-[-0.04em] text-white">
-            {topFacility?.name}
+            {selectedFacilityRow?.name}
           </h2>
-          <p className="mt-3 text-sm text-green-200">EPA GHGRP facility ranking leader for the selected year.</p>
+          <p className="mt-3 text-sm text-green-200">
+            {selectedFacility
+              ? 'Selected facility in the current reporting year.'
+              : 'Current facility ranking leader for the selected year.'}
+          </p>
           <div className="mt-6 font-display text-[2.2rem] tracking-[-0.03em] text-green-300">
-            {topFacility ? `${topFacility.mt.toFixed(3)} Mt` : '0 Mt'}
+            {selectedFacilityRow ? `${selectedFacilityRow.mt.toFixed(3)} Mt` : '0 Mt'}
           </div>
         </Card>
 
         <FacilityTable
           rows={filteredFacilities}
-          activeFacility={topFacility?.name}
+          activeFacility={selectedFacilityRow?.name}
           onSelectFacility={setSelectedFacility}
         />
       </PageWrapper>

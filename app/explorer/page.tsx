@@ -10,7 +10,6 @@ import { PageWrapper } from '@/components/layout/PageWrapper'
 import { Button } from '@/components/ui/Button'
 import { StatCard } from '@/components/ui/StatCard'
 import { useEmissionsData } from '@/lib/hooks/useEmissionsData'
-import { useAuthStore } from '@/lib/store/useAuthStore'
 import { useEpaStore } from '@/lib/store/useEpaStore'
 import { sectors } from '@/constants/sectors'
 import { getSectorBreakdown, getStateRanking } from '@/lib/data/selectors'
@@ -30,7 +29,6 @@ const YEARS = Array.from({ length: 14 }, (_, index) => 2010 + index)
 
 export default function ExplorerPage() {
   const data = useEmissionsData()
-  const currentUser = useAuthStore((state) => state.currentUser)
   const activeYear = useEpaStore((state) => state.activeYear)
   const activeSector = useEpaStore((state) => state.activeSector)
   const activeState = useEpaStore((state) => state.activeState)
@@ -57,7 +55,6 @@ export default function ExplorerPage() {
           <div className="mt-5">
             <Button
               variant="outline"
-              disabled={!currentUser}
               onClick={() =>
                 downloadJson(`verdeon-explorer-${activeYear}.json`, {
                   year: activeYear,
@@ -72,9 +69,6 @@ export default function ExplorerPage() {
               Export filtered view
             </Button>
           </div>
-          {!currentUser ? (
-            <p className="mt-3 text-sm text-muted">Filtered exports are available after sign-in. You can still explore the charts and rankings now.</p>
-          ) : null}
         </div>
 
         <div className="mb-8">

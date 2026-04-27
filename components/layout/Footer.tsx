@@ -14,7 +14,8 @@ const footerColumns = [
     title: 'Resources',
     links: [
       { href: '/states', label: 'States' },
-      { href: '/recommendations', label: 'Recommendations' },
+      { href: '/methodology', label: 'Methodology' },
+      { href: '/guides/epa-ghgrp-explained', label: 'EPA GHGRP guide' },
       { href: '/upload', label: 'Upload data' },
     ],
   },
@@ -22,8 +23,18 @@ const footerColumns = [
     title: 'Company',
     links: [
       { href: '/', label: 'About Verdeon' },
-      { href: '/', label: 'Methodology' },
+      { href: '/compare', label: 'Compare views' },
+      { href: '/sectors', label: 'Sector pages' },
+      { href: '/guides/compare-state-emissions', label: 'State comparison guide' },
       { href: 'https://www.epa.gov/ghgreporting/data-sets', label: 'EPA GHGRP source' },
+    ],
+  },
+  {
+    title: 'Legal',
+    links: [
+      { href: '/privacy', label: 'Privacy' },
+      { href: '/terms', label: 'Terms' },
+      { href: '/contact', label: 'Contact' },
     ],
   },
 ] as const
@@ -53,7 +64,7 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-[0.83rem] leading-7 text-white/40">
-              Carbon intelligence built on 14 years of EPA GHGRP reporting data for sustainability teams, ESG analysts, and policy researchers.
+              A cleaner interface for exploring U.S. EPA greenhouse gas reporting data by facility, state, sector, and year.
             </p>
             <div className="mt-4 inline-block rounded-sm border border-green-500/15 bg-green-500/8 px-3 py-2 text-[0.72rem] text-green-400">
               Data source: EPA GHGRP Direct Emitters, 2010–2023.
@@ -82,7 +93,7 @@ export function Footer() {
         </div>
 
         <div className="mt-10 flex flex-col gap-3 border-t border-white/6 pt-8 text-[0.76rem] text-white/40 md:flex-row md:items-center md:justify-between">
-          <p>Verdeon visualizes EPA Greenhouse Gas Reporting Program data for faster carbon analysis.</p>
+          <p>Verdeon helps people inspect EPA greenhouse gas reporting data without enterprise software.</p>
           <p>EPA attribution: figures sourced from EPA GHGRP Direct Emitters datasets and derived Verdeon calculations.</p>
         </div>
       </PageWrapper>

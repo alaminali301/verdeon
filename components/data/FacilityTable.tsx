@@ -5,6 +5,7 @@ import { slugifyLabel } from '@/lib/utils/slug'
 export interface FacilityRow {
   name: string
   mt: number
+  rank: number
 }
 
 export interface FacilityTableProps {
@@ -41,10 +42,10 @@ export function FacilityTable({
                 <span
                   className={[
                     'inline-flex h-8 min-w-8 items-center justify-center rounded-full px-2 text-xs font-semibold',
-                    index < 3 ? 'bg-green-900 text-white' : 'bg-green-50 text-green-900',
+                    facility.rank <= 3 ? 'bg-green-900 text-white' : 'bg-green-50 text-green-900',
                   ].join(' ')}
                 >
-                  {index + 1}
+                  {facility.rank}
                 </span>
               </td>
               <td className="px-5 py-4 text-sm text-green-900">

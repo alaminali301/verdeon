@@ -7,7 +7,6 @@ import { StateGrid } from '@/components/data/StateGrid'
 import { PageWrapper } from '@/components/layout/PageWrapper'
 import { Button } from '@/components/ui/Button'
 import { useEmissionsData } from '@/lib/hooks/useEmissionsData'
-import { useAuthStore } from '@/lib/store/useAuthStore'
 import { useEpaStore } from '@/lib/store/useEpaStore'
 import { getStateRanking } from '@/lib/data/selectors'
 import { downloadCsv } from '@/lib/utils/export'
@@ -16,7 +15,6 @@ const YEARS = Array.from({ length: 14 }, (_, index) => 2010 + index)
 
 export default function StatesPage() {
   const data = useEmissionsData()
-  const currentUser = useAuthStore((state) => state.currentUser)
   const activeYear = useEpaStore((state) => state.activeYear)
   const activeState = useEpaStore((state) => state.activeState)
   const setActiveYear = useEpaStore((state) => state.setActiveYear)
@@ -45,7 +43,6 @@ export default function StatesPage() {
           <div className="mt-5">
             <Button
               variant="outline"
-              disabled={!currentUser}
               onClick={() =>
                 downloadCsv(
                   `verdeon-states-${activeYear}.csv`,
@@ -58,13 +55,10 @@ export default function StatesPage() {
               Export state CSV
             </Button>
           </div>
-          {!currentUser ? (
-            <p className="mt-3 text-sm text-muted">Sign in to export the state table. Hover and compare the public preview freely.</p>
-          ) : null}
         </div>
 
         <div className="mb-8">
-          <PreviewGate compact description="Create an account to export state comparisons, upload files, and unlock the full analysis workflow." />
+          <PreviewGate compact description="Explore the state ranking, export the view, and compare year-over-year changes." />
         </div>
 
         <div className="mb-6">

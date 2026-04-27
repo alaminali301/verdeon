@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import * as XLSX from 'xlsx'
-import { RequireAuth } from '@/components/auth/RequireAuth'
 import { PageWrapper } from '@/components/layout/PageWrapper'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
@@ -56,16 +55,15 @@ export default function UploadPage() {
   }
 
   return (
-    <RequireAuth>
-      <main className="px-6 py-12 pt-28">
-        <PageWrapper>
+    <main className="px-6 py-12 pt-28">
+      <PageWrapper>
         <div className="mb-10">
           <p className="text-[0.75rem] font-semibold uppercase tracking-[0.1em] text-green-600">Upload</p>
           <h1 className="mt-3 font-display text-[clamp(2.2rem,4vw,3.4rem)] tracking-[-0.03em] text-green-950">
             Bring in your EPA workbook
           </h1>
           <p className="mt-4 max-w-3xl text-base leading-7 text-muted">
-            Verdeon can rebuild totals, sector mix, state rankings, and facility rankings when your file includes recognizable year and emissions columns.
+            Verdeon can rebuild totals, sector mix, state rankings, and facility rankings when your file includes recognizable year and emissions columns. Uploading a file updates the same dashboard, explorer, facility, and state views used across the site.
           </p>
         </div>
 
@@ -207,6 +205,9 @@ export default function UploadPage() {
               <a href="/sample-upload.csv" download>
                 <Button variant="outline">Download sample CSV</Button>
               </a>
+              <Link href="/dashboard">
+                <Button variant="outline">See how it updates</Button>
+              </Link>
               <Link href="/methodology">
                 <Button variant="outline">View methodology</Button>
               </Link>
@@ -224,8 +225,7 @@ export default function UploadPage() {
           </Card>
         </div>
         </div>
-        </PageWrapper>
-      </main>
-    </RequireAuth>
+      </PageWrapper>
+    </main>
   )
 }

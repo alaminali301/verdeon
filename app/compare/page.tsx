@@ -161,7 +161,7 @@ function ComparePageContent() {
         </div>
 
         <div className="mb-8">
-          <PreviewGate compact description="Preview comparisons publicly. Sign in to save views, upload data, and extend your analysis beyond the starter dataset." />
+          <PreviewGate compact description="Preview comparisons publicly and share links to any state or facility view." />
         </div>
 
         <Card className="rounded-[24px] p-6 shadow-card">

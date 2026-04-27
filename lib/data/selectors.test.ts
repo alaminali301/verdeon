@@ -45,9 +45,9 @@ describe('selectors', () => {
     const topThree = getTopFacilities(data, 2023, 3)
 
     expect(topThree).toEqual([
-      { name: 'James H Miller Jr', mt: 16.558 },
-      { name: 'Labadie', mt: 15.389 },
-      { name: 'Gen J M Gavin', mt: 13.451 },
+      { name: 'James H Miller Jr', mt: 16.558, rank: 1 },
+      { name: 'Labadie', mt: 15.389, rank: 2 },
+      { name: 'Gen J M Gavin', mt: 13.451, rank: 3 },
     ])
   })
 

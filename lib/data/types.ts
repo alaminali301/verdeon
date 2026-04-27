@@ -34,6 +34,12 @@ export interface YearValuePoint {
   rank: number | null
 }
 
+export interface FacilityRankingItem {
+  name: string
+  mt: number
+  rank: number
+}
+
 export interface Recommendation {
   id: string
   priority: 'HIGH' | 'MEDIUM' | 'LOW'

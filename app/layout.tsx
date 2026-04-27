@@ -25,14 +25,14 @@ export const metadata: Metadata = {
     template: '%s · Verdeon',
   },
   description:
-    'Carbon intelligence platform built on EPA GHGRP data with dashboards, facility rankings, state views, and reduction recommendations.',
+    'A cleaner, faster way to explore U.S. EPA greenhouse gas reporting data by facility, state, sector, and year.',
   applicationName: 'Verdeon',
   keywords: [
     'EPA GHGRP',
-    'carbon intelligence',
+    'EPA emissions explorer',
     'emissions dashboard',
     'greenhouse gas reporting',
-    'sustainability analytics',
+    'facility emissions',
   ],
   alternates: {
     canonical: '/',
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Verdeon',
     description:
-      'Turn 14 years of EPA greenhouse gas reporting data into clear insights, rankings, and reduction strategies.',
+      'Explore U.S. EPA greenhouse gas reporting data with facility rankings, state views, and year-by-year comparisons.',
     url: 'https://verdeon.io',
     siteName: 'Verdeon',
     locale: 'en_US',
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Verdeon',
     description:
-      'Carbon intelligence platform built on EPA GHGRP data with dashboards, state rankings, and facility insights.',
+      'A cleaner, faster interface for exploring U.S. EPA greenhouse gas reporting data.',
   },
   icons: {
     icon: '/favicon.ico',

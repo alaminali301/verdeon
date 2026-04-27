@@ -1,7 +1,6 @@
 'use client'
 
 import { Download } from 'lucide-react'
-import { RequireAuth } from '@/components/auth/RequireAuth'
 import { RecommendationCard } from '@/components/data/RecommendationCard'
 import { PageWrapper } from '@/components/layout/PageWrapper'
 import { Button } from '@/components/ui/Button'
@@ -23,9 +22,8 @@ export default function RecommendationsPage() {
   )
 
   return (
-    <RequireAuth>
-      <main className="px-6 py-12 pt-28">
-        <PageWrapper>
+    <main className="px-6 py-12 pt-28">
+      <PageWrapper>
         <div className="mb-10">
           <p className="text-[0.75rem] font-semibold uppercase tracking-[0.1em] text-green-600">Recommendations</p>
           <h1 className="mt-3 font-display text-[clamp(2.2rem,4vw,3.4rem)] tracking-[-0.03em] text-green-950">
@@ -88,8 +86,7 @@ export default function RecommendationsPage() {
             <RecommendationCard key={recommendation.id} recommendation={recommendation} />
           ))}
         </div>
-        </PageWrapper>
-      </main>
-    </RequireAuth>
+      </PageWrapper>
+    </main>
   )
 }

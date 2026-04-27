@@ -66,23 +66,23 @@ const HOW_ITEMS = [
   {
     number: '01',
     icon: '📂',
-    title: 'Upload EPA GHGRP files',
+    title: 'Open EPA-style files',
     description:
-      'Drop in any EPA GHGRP Excel file — annual data summaries, emissions by unit, or subpart datasets. Verdeon auto-detects the format and parses it instantly across all reporting years.',
+      'Bring in EPA-style CSV or Excel files and let Verdeon map year, emissions, state, sector, and facility fields into one consistent view.',
   },
   {
     number: '02',
     icon: '📊',
-    title: 'Explore the dashboards',
+    title: 'Compare the public data',
     description:
-      'See emissions by sector, company, state, and year — all interactive. Filter to specific facilities, compare year-over-year, and spot the trends hidden in 14 years of data.',
+      'Move through facility rankings, state views, sector mix, and year-by-year changes without digging through raw spreadsheets or legacy government interfaces.',
   },
   {
     number: '03',
     icon: '💡',
-    title: 'Act on the insights',
+    title: 'Share what you find',
     description:
-      "Verdeon's recommendation engine identifies your highest-impact reduction opportunities and surfaces concrete, prioritised strategies ranked by CO₂e savings potential.",
+      'Use linked views, compare pages, and exports to turn public emissions data into something easier to explain, cite, and revisit.',
   },
 ]
 const FAQS: FaqItem[] = [
@@ -106,7 +106,7 @@ const FAQS: FaqItem[] = [
   {
     question: 'Do I need to clean the EPA files first?',
     answer:
-      'No. Verdeon auto-detects EPA GHGRP file formats — the sheet name changed from "Direct Emitters" to "Direct Point Emitters" in 2018 — and handles all variants, header rows, and numeric formatting automatically.',
+      'Not always, but cleaner files help. Verdeon looks for common year, emissions, facility, state, and sector columns in the first worksheet and rebuilds the dataset from the rows it can map.',
   },
   {
     question: 'Why did emissions drop so much since 2010?',
@@ -121,12 +121,12 @@ const FAQS: FaqItem[] = [
   {
     question: 'Can I export charts and reports?',
     answer:
-      'Yes — all charts export as PNG or SVG, full reports as PDF or Excel. Starter plans include 3 exports/month; Pro and Enterprise plans include unlimited exports.',
+      'You can export filtered views from the app. In this starter build, exports focus on data snapshots rather than polished reporting packages.',
   },
   {
     question: 'Is there an API for our own tools?',
     answer:
-      'API access is on the Enterprise plan — REST endpoints for querying aggregated emissions data, running calculations, and retrieving recommendations programmatically.',
+      'Not in this build. Verdeon is currently focused on making EPA-style emissions data easier to explore in the browser.',
   },
 ]
 const VERDEON_CAPABILITIES = [
@@ -153,8 +153,8 @@ const VERDEON_CAPABILITIES = [
     eyebrow: 'Interactive workflow',
     features: [
       'Preview uploaded EPA-style workbooks before applying them',
-      'Export filtered snapshots, state rankings, facilities, and recommendations',
-      'Generate reduction strategy views tied to sector-specific opportunities',
+      'Export filtered snapshots, state rankings, and facility views',
+      'Share side-by-side comparisons with URL-synced state and facility views',
     ],
   },
 ] as const
@@ -230,42 +230,46 @@ export default function Home() {
               <FadeIn>
                 <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-200 bg-white/90 px-4 py-2 text-[0.76rem] font-semibold uppercase tracking-[0.1em] text-green-700">
                   <span className="h-2 w-2 rounded-full bg-green-500" />
-                  EPA GHGRP · 2010–2023 · Real data
+                  U.S. EPA GHGRP · 2010–2023
                 </div>
                 <h1 className="font-display text-[clamp(2.9rem,6vw,4.7rem)] font-bold leading-[0.96] tracking-[-0.04em] text-green-950">
-                  Carbon intelligence
+                  Explore EPA emissions data
                   <br />
-                  that <span className="text-green-600">drives action</span>
+                  <span className="text-green-600">without enterprise software</span>
                 </h1>
                 <p className="mt-6 max-w-xl text-[1.05rem] leading-8 text-muted">
-                  Verdeon turns 14 years of EPA Greenhouse Gas Reporting Program data into clear insights — from{' '}
-                  {formatMt(DATASET.years['2010'].total_mt)} in 2010 down to {formatMt(HERO_DATA.total_mt)} in 2023. Real numbers. Real trends. Real strategies.
+                  Verdeon is a cleaner, faster interface for public U.S. greenhouse gas reporting data. It is built for researchers, journalists, and small teams that need to compare facilities, states, sectors, and long-term trends without fighting raw spreadsheets or legacy tools.
                 </p>
                 <div className="mt-8 flex flex-wrap gap-4">
-                  <Link href="#cta">
-                    <Button className="px-6 py-3.5">Sign up</Button>
+                  <Link href="/dashboard">
+                    <Button className="px-6 py-3.5">Open the dashboard</Button>
+                  </Link>
+                  <Link href="/guides/epa-ghgrp-explained">
+                    <Button variant="outline" className="px-6 py-3.5">
+                      Learn the dataset
+                    </Button>
                   </Link>
                   <Link href="#data">
                     <Button variant="outline" className="px-6 py-3.5">
-                      Explore the data ↓
+                      See the public data
                     </Button>
                   </Link>
                 </div>
                 <div className="mt-10 flex items-center gap-4">
-                  <div className="flex -space-x-3">
-                    {['MR', 'JK', 'AL', 'TS'].map((initials) => (
+                  <div className="flex flex-wrap gap-2">
+                    {['EPA GHGRP', '2010–2023', '8 sectors', `${HERO_DATA.facilities.toLocaleString()} facilities`].map((item) => (
                       <div
-                        key={initials}
-                        className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-white bg-green-100 text-sm font-semibold text-green-900"
+                        key={item}
+                        className="rounded-full border border-green-200 bg-white px-3 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-green-700"
                       >
-                        {initials}
+                        {item}
                       </div>
                     ))}
                   </div>
                   <p className="text-sm leading-6 text-muted">
-                    <strong className="text-green-900">Built for sustainability teams</strong>
+                    <strong className="text-green-900">Built for public-data explorers</strong>
                     <br />
-                    exploring EPA emissions data
+                    researchers, journalists, and small teams
                   </p>
                 </div>
               </FadeIn>
@@ -277,7 +281,7 @@ export default function Home() {
                     <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
                     <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
                     <span className="ml-auto text-[0.75rem] tracking-[0.04em] text-white/50">
-                      Verdeon · EPA GHGRP · 2023
+                      Verdeon · EPA GHGRP · 2023 top facility
                     </span>
                   </div>
                   <div className="p-6">
@@ -390,7 +394,7 @@ export default function Home() {
 
         <section id="how" className="px-6 py-20">
           <PageWrapper>
-            <SectionHeader eyebrow="How it works" title="From raw EPA files to clear action" />
+            <SectionHeader eyebrow="How it works" title="From public EPA files to usable analysis" />
             <div className="mt-10 grid gap-6 lg:grid-cols-3">
               {HOW_ITEMS.map((item, index) => (
                 <FadeIn key={item.number} delay={index * 100}>
@@ -413,7 +417,7 @@ export default function Home() {
             <SectionHeader
               eyebrow="Data explorer"
               title="14 years of real EPA data"
-              description="Every number below comes directly from the EPA GHGRP files — 2010 through 2023. Click any year to explore."
+              description="Every number below comes directly from EPA GHGRP data covering 2010 through 2023. Click any year to explore."
             />
             <div className="mt-10 grid gap-6 lg:grid-cols-[1.15fr_.85fr]">
               <FadeIn>
@@ -433,14 +437,12 @@ export default function Home() {
                 <SectionHeader
                   eyebrow="Top emitters"
                   title="Biggest facilities by year"
-                  description="Power plants dominate every year. James H Miller Jr (AL) has led since 2015. Select a year below to explore the full top 10."
+                  description="Use the ranking view to see how the largest reporting facilities shift over time and jump into detail pages for trend history."
                 />
               </div>
               <FadeIn>
                 <Card featured className="rounded-[24px] p-6 shadow-lift">
-                  <div className="text-[0.75rem] uppercase tracking-[0.08em] text-green-300">
-                    {facilityYear} · #1 emitter
-                  </div>
+                  <div className="text-[0.75rem] uppercase tracking-[0.08em] text-green-300">{facilityYear} · top reporting facility</div>
                   <div className="mt-4 font-display text-[2.3rem] leading-none tracking-[-0.03em] text-white">
                     {facilityHighlight?.name}
                   </div>
@@ -512,7 +514,7 @@ export default function Home() {
             <SectionHeader
               eyebrow="Geographic view"
               title="Top 15 states · 2023"
-              description="Texas leads by a wide margin at 380 Mt — nearly 2.5× the next state. All figures direct from EPA GHGRP 2023 Direct Emitters data."
+              description="Compare reported emissions by state and move from high-level ranking into state detail and comparison views."
             />
             <div className="mt-10 grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
               {activeStates.map((state, index) => (
@@ -582,8 +584,8 @@ export default function Home() {
           <PageWrapper>
             <SectionHeader
               eyebrow="What you can do in Verdeon"
-              title="A better way to work with EPA emissions data"
-              description="Verdeon is designed to help you move from raw reporting files to usable analysis, comparisons, and exports without fighting spreadsheets."
+              title="A sharper niche than a general climate platform"
+              description="Verdeon is strongest when it stays focused: public U.S. emissions data, transparent methods, fast comparisons, and a much lighter workflow than enterprise sustainability software."
               align="center"
             />
             <div className="mt-10 grid gap-6 lg:grid-cols-3">
@@ -606,6 +608,35 @@ export default function Home() {
                 </FadeIn>
               ))}
             </div>
+            <div className="mt-8 flex flex-wrap justify-center gap-4 text-sm">
+              <Link href="/sectors" className="text-green-700 underline-offset-4 hover:underline">
+                Browse sector pages
+              </Link>
+              <Link href="/years/2023" className="text-green-700 underline-offset-4 hover:underline">
+                Explore 2023 summary
+              </Link>
+              <Link href="/guides/epa-ghgrp-explained" className="text-green-700 underline-offset-4 hover:underline">
+                Read the EPA GHGRP guide
+              </Link>
+            </div>
+            <div className="mt-8 rounded-[20px] border border-green-100 bg-white p-5 text-sm text-muted">
+              <span className="font-medium text-green-900">Popular starting points:</span>{' '}
+              <Link href="/guides/top-emitting-states" className="text-green-700 underline-offset-4 hover:underline">
+                top states
+              </Link>
+              {', '}
+              <Link href="/guides/largest-power-plant-emitters" className="text-green-700 underline-offset-4 hover:underline">
+                biggest emitters
+              </Link>
+              {', '}
+              <Link href="/guides/compare-state-emissions" className="text-green-700 underline-offset-4 hover:underline">
+                compare states
+              </Link>
+              {', '}
+              <Link href="/guides/how-to-read-epa-ghgrp-data" className="text-green-700 underline-offset-4 hover:underline">
+                reading the data
+              </Link>
+            </div>
           </PageWrapper>
         </section>
 
@@ -616,10 +647,10 @@ export default function Home() {
                 <SectionHeader eyebrow="FAQ" title="Questions & answers" />
                 <p className="mt-4 text-base leading-7 text-muted">
                   Can&apos;t find what you need?{' '}
-                  <a href="mailto:hello@verdeon.io" className="text-green-700">
-                    Email us
-                  </a>{' '}
-                  and we&apos;ll reply within 24 hours.
+                  <Link href="/methodology" className="text-green-700">
+                    review the methodology
+                  </Link>{' '}
+                  to see the source data, assumptions, and current limits of this build.
                 </p>
               </FadeIn>
               <FadeIn delay={100}>
@@ -660,17 +691,19 @@ export default function Home() {
             <FadeIn>
               <span className="mb-6 block text-5xl">🌿</span>
               <h2 className="font-display text-[clamp(2rem,4vw,3rem)] leading-[1.1] tracking-[-0.03em] text-white">
-                Start understanding your
+                Start exploring
                 <br />
-                <span className="text-green-300">carbon footprint today</span>
+                <span className="text-green-300">EPA emissions data faster</span>
               </h2>
               <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-white/55">
-                Upload your EPA GHGRP files and get your first real insights in minutes. Free to start, no credit card needed.
+                Open the public dashboard, compare states and facilities, or upload an EPA-style file to rebuild the views around your own dataset.
               </p>
               <div className="mt-10 flex flex-wrap justify-center gap-4">
-                <Button className="bg-green-500 text-green-950 hover:bg-green-400">Sign up</Button>
-                <Link href="#data">
-                  <Button variant="ghost">Explore the data</Button>
+                <Link href="/dashboard">
+                  <Button className="bg-green-500 text-green-950 hover:bg-green-400">Open dashboard</Button>
+                </Link>
+                <Link href="/methodology">
+                  <Button variant="ghost">Read methodology</Button>
                 </Link>
               </div>
             </FadeIn>
