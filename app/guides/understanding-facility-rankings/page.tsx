@@ -19,7 +19,7 @@ export default function UnderstandingFacilityRankingsGuidePage() {
             Understanding facility rankings
           </h1>
           <p className="mt-4 max-w-3xl text-base leading-7 text-muted">
-            Facility rankings are a fast way to find the biggest reported sources in a given year. The trick is using them as a starting point, not the full story.
+            Facility rankings are a direct way to find the biggest reported sources in a given year. The trick is using them as a starting point, not the full story.
           </p>
         </div>
 

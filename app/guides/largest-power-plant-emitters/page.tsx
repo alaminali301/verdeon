@@ -25,7 +25,7 @@ export default function LargestPowerPlantEmittersGuidePage() {
             Largest facility emitters in the EPA dataset
           </h1>
           <p className="mt-4 max-w-3xl text-base leading-7 text-muted">
-            The facility ranking pages help you move from national totals into specific names that appear at the top of the reporting dataset. This is often the fastest path for researchers or journalists looking for major emitters.
+            The facility ranking pages help you move from national totals into specific names that appear at the top of the reporting dataset. This is often a direct path for researchers or journalists looking for major emitters.
           </p>
         </div>
 

@@ -33,7 +33,7 @@ export default function HowToReadGhgrpPage() {
           <Card className="rounded-[24px] p-6 shadow-card">
             <h2 className="text-lg font-semibold text-green-900">Then compare sectors</h2>
             <p className="mt-3 text-sm leading-7 text-muted">
-              Sector views show whether the largest share comes from power plants, refineries, waste, or other industrial groups. This is usually the fastest way to understand the shape of a year.
+              Sector views show whether the largest share comes from power plants, refineries, waste, or other industrial groups. This is usually the clearest way to understand the shape of a year.
             </p>
           </Card>
           <Card className="rounded-[24px] p-6 shadow-card">

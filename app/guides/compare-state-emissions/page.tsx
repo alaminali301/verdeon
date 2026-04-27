@@ -19,7 +19,7 @@ export default function CompareStateEmissionsGuidePage() {
             Compare state emissions in the EPA dataset
           </h1>
           <p className="mt-4 max-w-3xl text-base leading-7 text-muted">
-            State-to-state comparison is one of the fastest ways to understand where reported emissions are concentrated. It also gives you a better entry point into deeper facility and sector analysis.
+            State-to-state comparison is one of the clearest ways to understand where reported emissions are concentrated. It also gives you a useful entry point into deeper facility and sector analysis.
           </p>
         </div>
 

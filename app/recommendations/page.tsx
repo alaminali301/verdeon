@@ -26,7 +26,7 @@ export default function RecommendationsPage() {
     0,
   )
   const topPriority = ranked[0]
-  const fastest = ranked.find((recommendation) => recommendation.horizon.includes('0-12') || recommendation.horizon.includes('0-18')) ?? ranked[0]
+  const shortTerm = ranked.find((recommendation) => recommendation.horizon.includes('0-12') || recommendation.horizon.includes('0-18')) ?? ranked[0]
   const structural = ranked.find((recommendation) => recommendation.priority === 'MEDIUM') ?? ranked[0]
 
   return (
@@ -87,11 +87,15 @@ export default function RecommendationsPage() {
           ))}
         </div>
 
+        <div className="mb-8 rounded-[18px] border border-green-100 bg-green-50 px-4 py-3 text-sm leading-7 text-green-900">
+          <span className="font-semibold">Note:</span> These recommendations are derived from public EPA GHGRP data and Verdeon calculations. Verify material decisions against the original EPA source. Not legal or compliance advice.
+        </div>
+
         <div className="mb-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
           <StatCard label="Combined potential" value={`${combinedPotential}%`} detail="Stacked potential reduction across visible strategies" />
           <StatCard label="Strategies visible" value={String(filtered.length)} detail="Recommendations in the active scope" />
           <StatCard label="Priority focus" value={topPriority?.priority ?? 'N/A'} detail={topPriority?.title ?? 'No recommendation available'} />
-          <StatCard label="Fastest win" value={fastest?.horizon ?? 'N/A'} detail={fastest?.owner ?? 'No owner available'} />
+          <StatCard label="Short-term win" value={shortTerm?.horizon ?? 'N/A'} detail={shortTerm?.owner ?? 'No owner available'} />
         </div>
 
         <div className="mb-8 grid gap-5 lg:grid-cols-2">
@@ -101,7 +105,7 @@ export default function RecommendationsPage() {
             <div className="mt-4 space-y-4 text-sm leading-7 text-muted">
               <div className="rounded-[16px] bg-green-50 px-4 py-3">
                 <div className="font-medium text-green-900">1. Fast operational fixes</div>
-                <div>{fastest?.title ?? 'Choose the shortest-horizon recommendation in the active sector.'}</div>
+                <div>{shortTerm?.title ?? 'Choose the shortest-horizon recommendation in the active sector.'}</div>
               </div>
               <div className="rounded-[16px] bg-green-50 px-4 py-3">
                 <div className="font-medium text-green-900">2. Largest structural lever</div>
@@ -109,7 +113,7 @@ export default function RecommendationsPage() {
               </div>
               <div className="rounded-[16px] bg-green-50 px-4 py-3">
                 <div className="font-medium text-green-900">3. Scale the playbook</div>
-                <div>Apply the strongest sector pattern to the rest of the facilities in that same sector.</div>
+                <div>Apply the most actionable sector pattern to the rest of the facilities in that same sector.</div>
               </div>
             </div>
           </div>

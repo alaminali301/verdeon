@@ -581,7 +581,7 @@ export default function Home() {
             <SectionHeader
               eyebrow="What you can do in Verdeon"
               title="A sharper niche than a general climate platform"
-              description="Verdeon is strongest when it stays focused: public U.S. emissions data, transparent methods, fast comparisons, and a much lighter workflow than enterprise sustainability software."
+              description="Verdeon is most useful when it stays focused: public U.S. emissions data, transparent methods, direct comparisons, and a much lighter workflow than enterprise sustainability software."
               align="center"
             />
             <div className="mt-10 grid gap-6 lg:grid-cols-3">
@@ -641,13 +641,13 @@ export default function Home() {
             <div className="grid gap-10 lg:grid-cols-[.8fr_1.2fr]">
               <FadeIn>
                 <SectionHeader eyebrow="FAQ" title="Questions & answers" />
-                <p className="mt-4 text-base leading-7 text-muted">
-                  Can&apos;t find what you need?{' '}
-                  <Link href="/methodology" className="text-green-700">
-                    review the data notes
-                  </Link>{' '}
+              <p className="mt-4 text-base leading-7 text-muted">
+                Can&apos;t find what you need?{' '}
+                <Link href="/methodology" className="text-green-700">
+                    review the methodology
+                </Link>{' '}
                   to see the source data, assumptions, and current limits of this build.
-                </p>
+              </p>
               </FadeIn>
               <FadeIn delay={100}>
                 <div className="space-y-3">
@@ -699,7 +699,7 @@ export default function Home() {
                   <Button className="bg-green-500 text-green-950 hover:bg-green-400">Open dashboard</Button>
                 </Link>
                 <Link href="/methodology">
-                  <Button variant="ghost">Read data notes</Button>
+                  <Button variant="ghost">Read methodology</Button>
                 </Link>
               </div>
             </FadeIn>

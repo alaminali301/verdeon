@@ -1,20 +1,37 @@
- 'use client'
+'use client'
 
-import { useEffect, useState } from 'react'
+import { useSyncExternalStore } from 'react'
 import Link from 'next/link'
 
+const NOTICE_STORAGE_KEY = 'verdeon-data-notice-compact'
+
+function getNoticeSnapshot() {
+  if (typeof window === 'undefined') {
+    return false
+  }
+
+  return window.localStorage.getItem(NOTICE_STORAGE_KEY) === '1'
+}
+
+function subscribeToNoticeChange(callback: () => void) {
+  if (typeof window === 'undefined') {
+    return () => {}
+  }
+
+  const onStorage = () => callback()
+  const onNoticeChange = () => callback()
+
+  window.addEventListener('storage', onStorage)
+  window.addEventListener('verdeon-data-notice-change', onNoticeChange)
+
+  return () => {
+    window.removeEventListener('storage', onStorage)
+    window.removeEventListener('verdeon-data-notice-change', onNoticeChange)
+  }
+}
+
 export function DataNotice() {
-  const [isCompact, setIsCompact] = useState(() => {
-    if (typeof window === 'undefined') {
-      return false
-    }
-
-    return window.localStorage.getItem('verdeon-data-notice-compact') === '1'
-  })
-
-  useEffect(() => {
-    window.localStorage.setItem('verdeon-data-notice-compact', isCompact ? '1' : '0')
-  }, [isCompact])
+  const isCompact = useSyncExternalStore(subscribeToNoticeChange, getNoticeSnapshot, () => false)
 
   return (
     <div className="sticky top-[4.5rem] z-[45] mx-auto w-full max-w-[1120px] px-3 pt-3 md:top-[5rem]">
@@ -33,7 +50,10 @@ export function DataNotice() {
               </Link>
               <button
                 type="button"
-                onClick={() => setIsCompact(false)}
+                onClick={() => {
+                  window.localStorage.setItem(NOTICE_STORAGE_KEY, '0')
+                  window.dispatchEvent(new Event('verdeon-data-notice-change'))
+                }}
                 className="rounded-full border border-amber-300 bg-white px-3 py-1 text-[0.72rem] font-semibold uppercase tracking-[0.08em] text-amber-950"
               >
                 Show details
@@ -54,7 +74,10 @@ export function DataNotice() {
               </Link>
               <button
                 type="button"
-                onClick={() => setIsCompact(true)}
+                onClick={() => {
+                  window.localStorage.setItem(NOTICE_STORAGE_KEY, '1')
+                  window.dispatchEvent(new Event('verdeon-data-notice-change'))
+                }}
                 className="rounded-full border border-amber-300 bg-white px-3 py-1 text-[0.72rem] font-semibold uppercase tracking-[0.08em] text-amber-950"
               >
                 Compact

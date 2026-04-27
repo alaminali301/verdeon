@@ -116,7 +116,7 @@ export function FacilityDetailPageClient({ slug }: { slug: string }) {
           <StatCard label="Latest visible year" value={String(latestPoint.year)} detail="Most recent year this facility appears in the bundled EPA data" />
           <StatCard label="Latest emissions" value={formatMt(latestPoint.value)} detail={latestPoint.rank ? `Ranked #${latestPoint.rank} in that year` : 'No active rank available'} />
           <StatCard label="Peak year" value={String(peakPoint.year)} detail={formatMt(peakPoint.value)} />
-          <StatCard label="Best rank" value={bestRank ? `#${bestRank}` : 'N/A'} detail={`${history.length} reporting years visible`} />
+          <StatCard label="Top rank" value={bestRank ? `#${bestRank}` : 'N/A'} detail={`${history.length} reporting years visible`} />
         </div>
 
         {detail ? (
