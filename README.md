@@ -1,4 +1,4 @@
-# Sustainability Tracker - Exercise Project
+# Sustainability Tracker 
 
 ## Overview
 Build a platform that calculates a company's carbon footprint based on EPA data and provides reduction strategies.
