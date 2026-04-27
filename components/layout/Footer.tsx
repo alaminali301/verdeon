@@ -14,7 +14,7 @@ const footerColumns = [
     title: 'Resources',
     links: [
       { href: '/states', label: 'States' },
-      { href: '/methodology', label: 'Methodology' },
+      { href: '/methodology', label: 'Data notes' },
       { href: '/guides/epa-ghgrp-explained', label: 'EPA GHGRP guide' },
       { href: '/upload', label: 'Upload data' },
     ],
@@ -24,6 +24,7 @@ const footerColumns = [
     links: [
       { href: '/', label: 'About Verdeon' },
       { href: '/compare', label: 'Compare views' },
+      { href: '/companies', label: 'Companies' },
       { href: '/sectors', label: 'Sector pages' },
       { href: '/guides/compare-state-emissions', label: 'State comparison guide' },
       { href: 'https://www.epa.gov/ghgreporting/data-sets', label: 'EPA GHGRP source' },

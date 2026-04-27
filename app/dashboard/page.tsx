@@ -1,26 +1,23 @@
 'use client'
 
-import dynamic from 'next/dynamic'
 import { Download } from 'lucide-react'
 import { PreviewGate } from '@/components/auth/PreviewGate'
-import { ChartSkeleton } from '@/components/charts/ChartSkeleton'
 import { PageWrapper } from '@/components/layout/PageWrapper'
 import { Button } from '@/components/ui/Button'
 import { StatCard } from '@/components/ui/StatCard'
+import { getJurisdictionName } from '@/constants/jurisdictions'
 import { useEmissionsData } from '@/lib/hooks/useEmissionsData'
 import { useYearComparison } from '@/lib/hooks/useYearComparison'
 import { useEpaStore } from '@/lib/store/useEpaStore'
 import { getSectorBreakdown, getStateRanking } from '@/lib/data/selectors'
 import { formatFacilities, formatMt, formatPct } from '@/lib/utils/format'
 import { downloadCsv, downloadJson } from '@/lib/utils/export'
+import dynamic from 'next/dynamic'
+import { ChartSkeleton } from '@/components/charts/ChartSkeleton'
 
 const DonutChart = dynamic(
   () => import('@/components/charts/DonutChart').then((mod) => mod.DonutChart),
   { ssr: false, loading: () => <ChartSkeleton className="min-h-[280px]" /> },
-)
-const TrendChart = dynamic(
-  () => import('@/components/charts/TrendChart').then((mod) => mod.TrendChart),
-  { ssr: false, loading: () => <ChartSkeleton className="min-h-[350px]" /> },
 )
 
 const YEARS = Array.from({ length: 14 }, (_, index) => 2010 + index)
@@ -37,6 +34,7 @@ export default function DashboardPage() {
   const sectors = getSectorBreakdown(data, activeYear)
   const states = getStateRanking(data, activeYear)
   const focusedState = states.find((state) => state.state === activeState) ?? states[0]
+  const leadingSector = sectors[0]
 
   return (
     <main className="px-6 py-12 pt-28">
@@ -90,14 +88,14 @@ export default function DashboardPage() {
         </div>
 
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-          <StatCard label="Total emissions" value={formatMt(yearData.total_mt)} detail={`${activeYear} reported total`} />
           <StatCard label="Facilities" value={yearData.facilities.toLocaleString()} detail={formatFacilities(yearData.facilities)} />
           <StatCard label="YoY change" value={formatPct(yoy.percent)} detail={`${yoy.absolute > 0 ? '+' : ''}${yoy.absolute.toFixed(1)} Mt versus prior year`} />
           <StatCard label="Power plants" value={`${powerPlantShare.toFixed(1)}%`} detail="Share of total reported emissions" />
-        </div>
-
-        <div className="mt-10">
-          <TrendChart activeYear={activeYear} onYearSelect={setActiveYear} />
+          <StatCard
+            label="Leading sector"
+            value={leadingSector?.name ?? 'N/A'}
+            detail={leadingSector ? formatMt(leadingSector.mt) : 'No sector available'}
+          />
         </div>
 
         <div className="mt-6 flex flex-wrap gap-2">
@@ -122,7 +120,7 @@ export default function DashboardPage() {
           <DonutChart data={sectors} year={activeYear} />
           <div className="rounded-[14px] border border-green-100 bg-white p-5 shadow-card">
             <div className="flex items-center justify-between gap-4">
-              <h2 className="text-base font-semibold text-green-900">State rankings · {activeYear}</h2>
+              <h2 className="text-base font-semibold text-green-900">Reporting jurisdictions · {activeYear}</h2>
               {focusedState ? (
                 <div className="text-sm text-green-700">
                   Focus: <span className="font-semibold">{focusedState.state}</span>
@@ -155,7 +153,7 @@ export default function DashboardPage() {
                         activeState === state.state ? 'text-white' : 'text-green-900',
                       ].join(' ')}
                     >
-                      {state.state}
+                      {activeState === state.state ? getJurisdictionName(state.state) : state.state}
                     </span>
                   </div>
                   <span className={['text-sm', activeState === state.state ? 'text-green-100' : 'text-muted'].join(' ')}>

@@ -648,7 +648,7 @@ export default function Home() {
                 <p className="mt-4 text-base leading-7 text-muted">
                   Can&apos;t find what you need?{' '}
                   <Link href="/methodology" className="text-green-700">
-                    review the methodology
+                    review the data notes
                   </Link>{' '}
                   to see the source data, assumptions, and current limits of this build.
                 </p>
@@ -703,7 +703,7 @@ export default function Home() {
                   <Button className="bg-green-500 text-green-950 hover:bg-green-400">Open dashboard</Button>
                 </Link>
                 <Link href="/methodology">
-                  <Button variant="ghost">Read methodology</Button>
+                  <Button variant="ghost">Read data notes</Button>
                 </Link>
               </div>
             </FadeIn>

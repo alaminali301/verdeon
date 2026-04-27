@@ -90,21 +90,9 @@ export function SectorBarChart({
           </BarChart>
         </ResponsiveContainer>
       </div>
-      <div className="mt-3 space-y-3">
-        {chartData.map((item) => (
-          <div key={item.name} className="space-y-1">
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2">
-                <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: item.color }} />
-                <span className="text-sm text-green-900">{item.name}</span>
-              </div>
-              <span className="text-sm text-muted">
-                {item.mt.toFixed(0)} Mt · {item.pct.toFixed(1)}%
-              </span>
-            </div>
-          </div>
-        ))}
-      </div>
+      <p className="mt-3 text-xs leading-6 text-muted">
+        The bar labels already carry the sector values, so this view stays compact instead of repeating the same numbers below.
+      </p>
     </div>
   )
 }

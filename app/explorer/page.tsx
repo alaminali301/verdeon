@@ -1,20 +1,23 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import Link from 'next/link'
 import { useState } from 'react'
 import { Download } from 'lucide-react'
 import { PreviewGate } from '@/components/auth/PreviewGate'
 import { ChartSkeleton } from '@/components/charts/ChartSkeleton'
-import { SectorList } from '@/components/data/SectorList'
 import { PageWrapper } from '@/components/layout/PageWrapper'
 import { Button } from '@/components/ui/Button'
 import { StatCard } from '@/components/ui/StatCard'
+import { get2023DetailsSummary, get2023FacilityDetails, get2023StateDetails } from '@/lib/data/epa-2023-details'
 import { useEmissionsData } from '@/lib/hooks/useEmissionsData'
+import type { SectorName } from '@/lib/data/types'
 import { useEpaStore } from '@/lib/store/useEpaStore'
 import { sectors } from '@/constants/sectors'
-import { getSectorBreakdown, getStateRanking } from '@/lib/data/selectors'
+import { getSectorBreakdown, getStateRanking, getTopFacilities } from '@/lib/data/selectors'
 import { formatMt } from '@/lib/utils/format'
 import { downloadJson } from '@/lib/utils/export'
+import { slugifyLabel } from '@/lib/utils/slug'
 
 const SectorBarChart = dynamic(
   () => import('@/components/charts/SectorBarChart').then((mod) => mod.SectorBarChart),
@@ -38,11 +41,31 @@ export default function ExplorerPage() {
   const [showStates, setShowStates] = useState(false)
 
   const yearData = data.years[String(activeYear)]
+  const detailSummary = activeYear === 2023 ? get2023DetailsSummary() : null
   const allSectors = getSectorBreakdown(data, activeYear)
   const sectorItems = activeSector
     ? allSectors.filter((item) => item.name === activeSector)
     : allSectors
-  const states = getStateRanking(data, activeYear)
+  const stateRows =
+    activeYear === 2023
+      ? get2023StateDetails().map((state) => ({
+          state: state.state,
+          rank: state.rank,
+          mt: state.totalMt,
+        }))
+      : getStateRanking(data, activeYear)
+  const facilityRows =
+    activeYear === 2023
+      ? get2023FacilityDetails().map((facility) => ({
+          name: facility.name,
+          rank: facility.rank,
+          mt: facility.totalMt,
+        }))
+      : getTopFacilities(data, activeYear, 10)
+  const handleSelectSector = (sector: SectorName | null) => {
+    setActiveState(null)
+    setActiveSector(sector)
+  }
 
   return (
     <main className="px-6 py-12 pt-28">
@@ -61,7 +84,8 @@ export default function ExplorerPage() {
                   activeSector,
                   activeState,
                   sectors: allSectors,
-                  states,
+                  states: stateRows,
+                  facilities: facilityRows,
                 })
               }
             >
@@ -69,6 +93,12 @@ export default function ExplorerPage() {
               Export filtered view
             </Button>
           </div>
+        </div>
+
+        <div className="mb-6 rounded-[18px] border border-green-100 bg-white/90 p-4 text-sm leading-7 text-muted shadow-card">
+          {activeYear === 2023
+            ? '2023 is now backed by the full EPA workbook extract: 54 reporting jurisdictions, 6,470 direct emitters, and 2,294 parent companies.'
+            : 'Bundled EPA summary scope: 15 states, 10 facilities, and 8 sectors per reporting year. Upload a workbook if you want a wider slice of data.'}
         </div>
 
         <div className="mb-8">
@@ -96,7 +126,7 @@ export default function ExplorerPage() {
         <div className="mt-5 flex flex-wrap gap-2">
           <button
             type="button"
-            onClick={() => setActiveSector(null)}
+            onClick={() => handleSelectSector(null)}
             className={[
               'rounded-full border px-4 py-2 text-sm transition-colors',
               activeSector === null
@@ -110,7 +140,7 @@ export default function ExplorerPage() {
             <button
               key={sector.name}
               type="button"
-              onClick={() => setActiveSector(activeSector === sector.name ? null : sector.name)}
+              onClick={() => handleSelectSector(activeSector === sector.name ? null : sector.name)}
               className={[
                 'rounded-full border px-4 py-2 text-sm transition-colors',
                 activeSector === sector.name
@@ -124,9 +154,25 @@ export default function ExplorerPage() {
         </div>
 
         <div className="mt-8 grid gap-5 md:grid-cols-3">
-          <StatCard label="Year total" value={formatMt(yearData.total_mt)} detail={`${activeYear} direct emitters total`} />
-          <StatCard label="Facilities" value={yearData.facilities.toLocaleString()} detail="Reporting facilities in selected year" />
-          <StatCard label="Sector focus" value={activeSector ?? 'All'} detail={activeSector ? 'Filtered sector breakdown' : 'All sectors active'} />
+          <StatCard
+            label="Year total"
+            value={formatMt(detailSummary?.totalMt ?? yearData.total_mt)}
+            detail={`${activeYear} direct emitters total`}
+          />
+          <StatCard
+            label="Facilities"
+            value={(detailSummary?.facilities.length ?? yearData.facilities).toLocaleString()}
+            detail="Reporting facilities in selected year"
+          />
+          <StatCard
+            label="Dataset scope"
+            value={`${stateRows.length} jurisdictions`}
+            detail={
+              activeYear === 2023
+                ? `${facilityRows.length.toLocaleString()} facilities and ${detailSummary?.companies.length.toLocaleString() ?? 0} parent companies loaded`
+                : `${facilityRows.length.toLocaleString()} facilities visible for this year`
+            }
+          />
         </div>
 
         <div className="mt-10 grid gap-6 xl:grid-cols-[1fr_.9fr]">
@@ -135,32 +181,68 @@ export default function ExplorerPage() {
         </div>
 
         <div className="mt-8 grid gap-6 xl:grid-cols-[.9fr_1.1fr]">
-          <SectorList items={allSectors} activeSector={activeSector} />
-          <div className="rounded-[14px] border border-green-100 bg-white p-5 shadow-card">
-            <button
-              type="button"
-              onClick={() => setShowStates((value) => !value)}
-              className="flex w-full items-center justify-between text-left"
-            >
-              <span className="text-base font-semibold text-green-900">State rankings · {activeYear}</span>
-              <span className="text-sm text-green-700">{showStates ? 'Hide' : 'Show'}</span>
-            </button>
-            {showStates ? (
-              <div className="mt-4 space-y-3">
-                {states.map((state) => (
-                  <div key={state.state} className="flex items-center justify-between rounded-[14px] bg-green-50 px-4 py-3">
-                    <button
-                      type="button"
-                      onClick={() => setActiveState(activeState === state.state ? null : state.state)}
+          <div className="rounded-[24px] border border-green-100 bg-white p-5 shadow-card">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <h2 className="text-lg font-semibold text-green-900">Top jurisdictions</h2>
+                <p className="mt-1 text-sm text-muted">
+                  {activeYear === 2023
+                    ? 'The 2023 workbook extract includes all 54 reporting jurisdictions.'
+                    : 'The bundled EPA summary includes the top 15 state totals per year.'}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowStates((value) => !value)}
+                className="text-sm font-medium text-green-700 underline-offset-4 hover:underline"
+              >
+                {showStates ? 'Collapse' : 'Expand'}
+              </button>
+            </div>
+            <div className="mt-4 space-y-3">
+              {(showStates ? stateRows : stateRows.slice(0, 8)).map((state) => (
+                <div key={state.state} className="flex items-center justify-between rounded-[14px] bg-green-50 px-4 py-3">
+                  <button
+                    type="button"
+                    onClick={() => setActiveState(activeState === state.state ? null : state.state)}
+                    className="text-sm font-medium text-green-900 underline-offset-4 hover:underline"
+                  >
+                    #{state.rank} {state.state}
+                  </button>
+                  <span className="text-sm text-muted">{formatMt(state.mt)}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-[24px] border border-green-100 bg-white p-5 shadow-card">
+            <div>
+              <h2 className="text-lg font-semibold text-green-900">Top facilities</h2>
+              <p className="mt-1 text-sm text-muted">
+                {activeYear === 2023
+                  ? 'The 2023 EPA workbook now powers this list, including city, state, county, and parent company.'
+                  : 'The bundled starter file includes the top 10 facilities per year in the dataset slice.'}
+              </p>
+            </div>
+            <div className="mt-4 space-y-3">
+              {(activeYear === 2023 ? facilityRows.slice(0, 12) : facilityRows).map((facility) => (
+                <div key={facility.name} className="flex items-center justify-between gap-4 rounded-[14px] bg-green-50 px-4 py-3">
+                  <div>
+                    <Link
+                      href={`/facilities/${slugifyLabel(facility.name)}`}
                       className="text-sm font-medium text-green-900 underline-offset-4 hover:underline"
                     >
-                      #{state.rank} {state.state}
-                    </button>
-                    <span className="text-sm text-muted">{formatMt(state.mt)}</span>
+                      #{facility.rank} {facility.name}
+                    </Link>
+                    <div className="mt-1 text-xs text-muted">Open facility detail</div>
                   </div>
-                ))}
-              </div>
-            ) : null}
+                  <span className="text-sm text-muted">{formatMt(facility.mt)}</span>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 text-sm text-muted">
+              Need more coverage than the starter slice provides? Upload a broader workbook and rebuild the explorer around that file.
+            </div>
           </div>
         </div>
       </PageWrapper>

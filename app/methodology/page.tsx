@@ -19,7 +19,7 @@ export default function MethodologyPage() {
           <Card className="rounded-[24px] p-6 shadow-card">
             <h2 className="text-lg font-semibold text-green-900">Primary source</h2>
             <p className="mt-3 text-sm leading-7 text-muted">
-              The starter dataset in this project is based on EPA GHGRP direct emitter summaries covering reporting years 2010 through 2023. The app presents those values as annual totals, sector distributions, top states, and top facilities.
+              The bundled EPA summary in this project is based on EPA GHGRP direct emitter summaries covering reporting years 2010 through 2023. The app presents those values as annual totals, sector distributions, top jurisdictions, and top facilities.
             </p>
           </Card>
 

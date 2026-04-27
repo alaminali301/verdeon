@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
 import data from '@/lib/data/epa-data.json'
 import type { EpaDataset } from '@/lib/data/types'
-import { getAvailableFacilityNames, getFacilityHistory } from '@/lib/data/selectors'
+import { getFacilityHistory } from '@/lib/data/selectors'
 import { FacilityDetailPageClient } from '@/components/pages/FacilityDetailPageClient'
+import { find2023FacilityDetail, get2023FacilityNames } from '@/lib/data/epa-2023-details'
 import { findLabelBySlug, slugifyLabel } from '@/lib/utils/slug'
 
 interface FacilityDetailPageProps {
@@ -14,14 +15,14 @@ interface FacilityDetailPageProps {
 const DATASET = data as EpaDataset
 
 export async function generateStaticParams() {
-  return getAvailableFacilityNames(DATASET).map((facility) => ({
+  return get2023FacilityNames().slice(0, 150).map((facility) => ({
     slug: slugifyLabel(facility),
   }))
 }
 
 export async function generateMetadata({ params }: FacilityDetailPageProps): Promise<Metadata> {
   const { slug } = await params
-  const facilityName = findLabelBySlug(getAvailableFacilityNames(DATASET), slug)
+  const facilityName = findLabelBySlug(get2023FacilityNames(), slug)
 
   if (!facilityName) {
     return {
@@ -31,9 +32,10 @@ export async function generateMetadata({ params }: FacilityDetailPageProps): Pro
 
   const history = getFacilityHistory(DATASET, facilityName)
   const latestPoint = history.at(-1)
+  const detail = find2023FacilityDetail(facilityName)
 
   return {
-    title: `${facilityName} Emissions`,
+    title: detail?.parentCompany ? `${facilityName} · ${detail.parentCompany}` : `${facilityName} Emissions`,
     description: latestPoint
       ? `Explore ${facilityName} emissions history and facility ranking trends in the EPA greenhouse gas reporting dataset.`
       : `Explore ${facilityName} in the EPA greenhouse gas reporting dataset.`,

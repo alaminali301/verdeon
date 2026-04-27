@@ -11,12 +11,19 @@ import { PageWrapper } from '@/components/layout/PageWrapper'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { StatCard } from '@/components/ui/StatCard'
+import { getJurisdictionName } from '@/constants/jurisdictions'
 import {
   getAvailableFacilityNames,
   getAvailableStates,
   getFacilityHistory,
   getStateHistory,
 } from '@/lib/data/selectors'
+import {
+  find2023FacilityDetail,
+  find2023StateDetail,
+  get2023FacilityNames,
+  get2023StateNames,
+} from '@/lib/data/epa-2023-details'
 import { useEmissionsData } from '@/lib/hooks/useEmissionsData'
 import { useEpaStore } from '@/lib/store/useEpaStore'
 import { formatMt } from '@/lib/utils/format'
@@ -46,8 +53,20 @@ function ComparePageContent() {
   const router = useRouter()
   const [copied, setCopied] = useState(false)
 
-  const facilityNames = useMemo(() => getAvailableFacilityNames(data), [data])
-  const stateNames = useMemo(() => getAvailableStates(data), [data])
+  const facilityNames = useMemo(
+    () =>
+      activeYear === 2023
+        ? Array.from(new Set([...getAvailableFacilityNames(data), ...get2023FacilityNames()]))
+        : getAvailableFacilityNames(data),
+    [activeYear, data],
+  )
+  const stateNames = useMemo(
+    () =>
+      activeYear === 2023
+        ? Array.from(new Set([...getAvailableStates(data), ...get2023StateNames()]))
+        : getAvailableStates(data),
+    [activeYear, data],
+  )
   const requestedMode = searchParams.get('mode') === 'facility' ? 'facility' : 'state'
   const options = requestedMode === 'facility' ? facilityNames : stateNames
   const defaultA = options[0] ?? ''
@@ -116,14 +135,43 @@ function ComparePageContent() {
     return exact ?? fallback
   }
 
-  const seriesA =
-    requestedMode === 'facility'
-      ? getFacilityHistory(data, selectedA)
-      : getStateHistory(data, selectedA)
-  const seriesB =
-    requestedMode === 'facility'
-      ? getFacilityHistory(data, selectedB)
-      : getStateHistory(data, selectedB)
+  const seriesA = useMemo(() => {
+    const history =
+      requestedMode === 'facility'
+        ? getFacilityHistory(data, selectedA)
+        : getStateHistory(data, selectedA)
+
+    if (history.length || activeYear !== 2023) {
+      return history
+    }
+
+    if (requestedMode === 'facility') {
+      const detail = find2023FacilityDetail(selectedA)
+      return detail ? [{ year: 2023, value: detail.totalMt, rank: detail.rank }] : []
+    }
+
+    const detail = find2023StateDetail(selectedA)
+    return detail ? [{ year: 2023, value: detail.totalMt, rank: detail.rank }] : []
+  }, [activeYear, data, requestedMode, selectedA])
+
+  const seriesB = useMemo(() => {
+    const history =
+      requestedMode === 'facility'
+        ? getFacilityHistory(data, selectedB)
+        : getStateHistory(data, selectedB)
+
+    if (history.length || activeYear !== 2023) {
+      return history
+    }
+
+    if (requestedMode === 'facility') {
+      const detail = find2023FacilityDetail(selectedB)
+      return detail ? [{ year: 2023, value: detail.totalMt, rank: detail.rank }] : []
+    }
+
+    const detail = find2023StateDetail(selectedB)
+    return detail ? [{ year: 2023, value: detail.totalMt, rank: detail.rank }] : []
+  }, [activeYear, data, requestedMode, selectedB])
 
   const activePointA = seriesA.find((point) => point.year === activeYear) ?? seriesA.at(-1) ?? { value: 0, rank: null }
   const activePointB = seriesB.find((point) => point.year === activeYear) ?? seriesB.at(-1) ?? { value: 0, rank: null }
@@ -189,6 +237,11 @@ function ComparePageContent() {
 
             <label className="block">
               <span className="mb-2 block text-sm font-medium text-green-900">Compare A</span>
+              {requestedMode === 'state' && selectedA ? (
+                <div className="mb-2 text-xs font-medium uppercase tracking-[0.08em] text-green-600">
+                  {getJurisdictionName(selectedA)} · {selectedA}
+                </div>
+              ) : null}
               <div className="rounded-[18px] border border-green-200 bg-white p-3">
                 <div className="flex items-center gap-2 rounded-[14px] border border-green-100 px-3 py-3">
                   <Search size={16} className="text-green-700" />
@@ -240,6 +293,11 @@ function ComparePageContent() {
 
             <label className="block">
               <span className="mb-2 block text-sm font-medium text-green-900">Compare B</span>
+              {requestedMode === 'state' && selectedB ? (
+                <div className="mb-2 text-xs font-medium uppercase tracking-[0.08em] text-green-600">
+                  {getJurisdictionName(selectedB)} · {selectedB}
+                </div>
+              ) : null}
               <div className="rounded-[18px] border border-green-200 bg-white p-3">
                 <div className="flex items-center gap-2 rounded-[14px] border border-green-100 px-3 py-3">
                   <Search size={16} className="text-green-700" />

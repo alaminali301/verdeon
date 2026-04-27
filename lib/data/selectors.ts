@@ -4,6 +4,7 @@ import type {
   EpaYearData,
   FacilityRankingItem,
   SectorBreakdownItem,
+  SectorName,
   YearValuePoint,
 } from '@/lib/data/types'
 
@@ -22,7 +23,7 @@ export function getSectorBreakdown(data: EpaDataset, year: number): SectorBreakd
 
   return Object.entries(yearData.sectors)
     .map(([name, mt]) => ({
-      name,
+      name: name as SectorName,
       mt,
       pct: yearData.total_mt === 0 ? 0 : (mt / yearData.total_mt) * 100,
       color: SECTOR_COLORS[name] ?? SECTOR_COLORS.Other,

@@ -15,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/compare',
     '/upload',
     '/methodology',
+    '/companies',
     '/guides/epa-ghgrp-explained',
     '/sectors',
   ]

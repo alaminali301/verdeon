@@ -6,6 +6,10 @@ export interface FacilityRow {
   name: string
   mt: number
   rank: number
+  city?: string | null
+  state?: string | null
+  parentCompany?: string | null
+  county?: string | null
 }
 
 export interface FacilityTableProps {
@@ -57,6 +61,12 @@ export function FacilityTable({
                   >
                     {facility.name}
                   </button>
+                  {facility.city || facility.state || facility.parentCompany ? (
+                    <div className="text-xs text-muted">
+                      {[facility.city, facility.state].filter(Boolean).join(', ')}
+                      {facility.parentCompany ? ` · ${facility.parentCompany}` : ''}
+                    </div>
+                  ) : null}
                   <Link
                     href={`/facilities/${slugifyLabel(facility.name)}`}
                     className="text-xs font-medium text-green-700 underline-offset-4 hover:underline"

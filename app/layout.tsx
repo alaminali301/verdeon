@@ -64,11 +64,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${playfair.variable} ${instrumentSans.variable}`}>
-      <body className="min-h-screen bg-green-50 font-body text-charcoal antialiased">
+      <body className="relative min-h-screen overflow-x-hidden bg-green-50 font-body text-charcoal antialiased">
         <Providers>
-          <Navbar />
-          {children}
-          <Footer />
+          <div className="relative z-10">
+            <Navbar />
+            {children}
+            <Footer />
+          </div>
         </Providers>
       </body>
     </html>

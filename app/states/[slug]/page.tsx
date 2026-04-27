@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
 import data from '@/lib/data/epa-data.json'
 import type { EpaDataset } from '@/lib/data/types'
-import { getAvailableStates, getStateHistory } from '@/lib/data/selectors'
+import { getStateHistory } from '@/lib/data/selectors'
 import { StateDetailPageClient } from '@/components/pages/StateDetailPageClient'
+import { get2023StateNames } from '@/lib/data/epa-2023-details'
 import { findLabelBySlug, slugifyLabel } from '@/lib/utils/slug'
 
 interface StateDetailPageProps {
@@ -14,14 +15,14 @@ interface StateDetailPageProps {
 const DATASET = data as EpaDataset
 
 export async function generateStaticParams() {
-  return getAvailableStates(DATASET).map((state) => ({
+  return get2023StateNames().map((state) => ({
     slug: slugifyLabel(state),
   }))
 }
 
 export async function generateMetadata({ params }: StateDetailPageProps): Promise<Metadata> {
   const { slug } = await params
-  const stateName = findLabelBySlug(getAvailableStates(DATASET), slug)
+  const stateName = findLabelBySlug(get2023StateNames(), slug)
 
   if (!stateName) {
     return {

@@ -22,7 +22,7 @@ export type SectorName =
   | 'Other'
 
 export interface SectorBreakdownItem {
-  name: string
+  name: SectorName
   mt: number
   pct: number
   color: string
@@ -40,6 +40,46 @@ export interface FacilityRankingItem {
   rank: number
 }
 
+export interface FacilityDetailRecord {
+  rank: number
+  facilityId: number
+  frsId: string | null
+  name: string
+  city: string | null
+  state: string
+  zip: string | null
+  address: string | null
+  county: string | null
+  latitude: number | null
+  longitude: number | null
+  naics: string | null
+  subparts: string[]
+  sectors: string[]
+  totalMt: number
+  co2Mt: number | null
+  methaneMt: number | null
+  n2oMt: number | null
+  parentCompany: string | null
+  parentCompanyOwnership: number | null
+}
+
+export interface StateDetailRecord {
+  state: string
+  totalMt: number
+  facilities: number
+  rank: number
+  sharePct: number
+}
+
+export interface CompanyRankingRecord {
+  name: string
+  totalMt: number
+  facilities: number
+  states: number
+  topFacility: string
+  averageOwnership: number | null
+}
+
 export interface Recommendation {
   id: string
   priority: 'HIGH' | 'MEDIUM' | 'LOW'
@@ -48,4 +88,8 @@ export interface Recommendation {
   potentialReductionPct: number
   sector: SectorName
   tags: string[]
+  horizon: string
+  owner: string
+  implementation: string[]
+  kpis: string[]
 }

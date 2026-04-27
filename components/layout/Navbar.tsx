@@ -13,7 +13,6 @@ const primaryLinks = [
   { href: '/facilities', label: 'Facilities' },
   { href: '/states', label: 'States' },
   { href: '/compare', label: 'Compare' },
-  { href: '/methodology', label: 'Methodology' },
   { href: '/recommendations', label: 'Recommendations' },
 ] as const
 
@@ -82,9 +81,6 @@ export function Navbar() {
           </nav>
 
           <div className="ml-auto hidden items-center gap-3 md:flex">
-            <Link href="/methodology">
-              <Button variant="outline">Methodology</Button>
-            </Link>
             <Link href="/upload">
               <Button>Upload data</Button>
             </Link>
@@ -120,11 +116,6 @@ export function Navbar() {
               ))}
             </nav>
             <div className="mt-4 flex flex-col gap-2">
-              <Link href="/methodology">
-                <Button variant="outline" className="w-full justify-center">
-                  Methodology
-                </Button>
-              </Link>
               <Link href="/upload">
                 <Button className="w-full justify-center">Upload data</Button>
               </Link>

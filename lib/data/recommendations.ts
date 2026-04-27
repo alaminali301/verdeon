@@ -10,6 +10,14 @@ export const recommendations: Recommendation[] = [
     potentialReductionPct: 18,
     sector: 'Power Plants',
     tags: ['fuel switching', 'renewables', 'dispatch optimization'],
+    horizon: '0-24 months',
+    owner: 'Utility strategy / generation planning',
+    implementation: [
+      'Rank coal units by emissions intensity and operating margin.',
+      'Pair retirement candidates with grid-reliability replacements.',
+      'Track dispatch shifts monthly and compare against the 2023 baseline.',
+    ],
+    kpis: ['Coal generation share', 'Unit capacity factor', 'Annual Mt avoided'],
   },
   {
     id: 'chemicals-process-heat',
@@ -20,6 +28,14 @@ export const recommendations: Recommendation[] = [
     potentialReductionPct: 11,
     sector: 'Chemicals',
     tags: ['process heat', 'electrification', 'heat recovery'],
+    horizon: '6-36 months',
+    owner: 'Plant engineering / decarbonization',
+    implementation: [
+      'Identify process lines with steady thermal demand.',
+      'Use waste-heat recovery before new electrified equipment.',
+      'Retire the highest-emitting steam loops first.',
+    ],
+    kpis: ['Thermal energy intensity', 'Steam loss rate', 'Electrified heat share'],
   },
   {
     id: 'petroleum-methane',
@@ -30,6 +46,14 @@ export const recommendations: Recommendation[] = [
     potentialReductionPct: 14,
     sector: 'Petroleum & Gas',
     tags: ['methane', 'LDAR', 'compressors'],
+    horizon: '0-18 months',
+    owner: 'Operations / environmental compliance',
+    implementation: [
+      'Deploy continuous monitors at largest compressor stations.',
+      'Prioritize repeat leaks and chronic high-intensity assets.',
+      'Tie repair cycles to facility ranking changes quarter over quarter.',
+    ],
+    kpis: ['Leak closure time', 'Methane intensity', 'Compressor uptime'],
   },
   {
     id: 'minerals-kiln-efficiency',
@@ -40,6 +64,14 @@ export const recommendations: Recommendation[] = [
     potentialReductionPct: 9,
     sector: 'Minerals',
     tags: ['kilns', 'clinker', 'efficiency'],
+    horizon: '12-36 months',
+    owner: 'Process engineering / capital planning',
+    implementation: [
+      'Benchmark kiln fuel and clinker ratios by plant.',
+      'Start with the oldest kilns and the largest thermal losses.',
+      'Track efficiency gains against the same reporting year baseline.',
+    ],
+    kpis: ['Clinker ratio', 'Kiln heat rate', 'Fuel per ton output'],
   },
   {
     id: 'waste-landfill-gas',
@@ -50,6 +82,14 @@ export const recommendations: Recommendation[] = [
     potentialReductionPct: 13,
     sector: 'Waste',
     tags: ['landfill gas', 'methane capture', 'RNG'],
+    horizon: '0-24 months',
+    owner: 'Landfill operations / gas management',
+    implementation: [
+      'Prioritize sites with large methane spikes and poor capture uptime.',
+      'Expand wellfield coverage before adding new flaring capacity.',
+      'Route stable captured gas into beneficial use where possible.',
+    ],
+    kpis: ['Capture uptime', 'Methane slip', 'RNG utilization'],
   },
   {
     id: 'metals-furnace-efficiency',
@@ -60,6 +100,14 @@ export const recommendations: Recommendation[] = [
     potentialReductionPct: 8,
     sector: 'Metals',
     tags: ['furnaces', 'scrap', 'waste heat'],
+    horizon: '6-30 months',
+    owner: 'Metallurgy / maintenance',
+    implementation: [
+      'Tune furnace controls and reduce avoidable idle firing.',
+      'Increase recycled feedstock share where quality allows.',
+      'Recover waste heat from the largest continuous loads first.',
+    ],
+    kpis: ['Energy per ton', 'Scrap input share', 'Waste heat recovered'],
   },
   {
     id: 'refineries-hydrogen-optimization',
@@ -70,6 +118,14 @@ export const recommendations: Recommendation[] = [
     potentialReductionPct: 7,
     sector: 'Refineries',
     tags: ['hydrogen', 'flare reduction', 'heater efficiency'],
+    horizon: '6-24 months',
+    owner: 'Refinery operations / energy systems',
+    implementation: [
+      'Balance hydrogen networks before adding new capacity.',
+      'Tune fired heaters and reduce excess firing.',
+      'Set a flare minimization target by unit and month.',
+    ],
+    kpis: ['Flare events', 'Hydrogen efficiency', 'Heater fuel use'],
   },
   {
     id: 'other-cross-sector-controls',
@@ -80,5 +136,13 @@ export const recommendations: Recommendation[] = [
     potentialReductionPct: 6,
     sector: 'Other',
     tags: ['energy management', 'controls', 'operations'],
+    horizon: '0-12 months',
+    owner: 'Facilities management / sustainability',
+    implementation: [
+      'Deploy metering and controls on the highest-load systems first.',
+      'Use maintenance logs to find repeated energy waste.',
+      'Standardize operating procedures across mixed-source facilities.',
+    ],
+    kpis: ['Meter coverage', 'Energy intensity', 'Maintenance closure rate'],
   },
 ]

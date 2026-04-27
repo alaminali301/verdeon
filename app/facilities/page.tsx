@@ -7,6 +7,7 @@ import { FacilityTable } from '@/components/data/FacilityTable'
 import { PageWrapper } from '@/components/layout/PageWrapper'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
+import { get2023FacilityDetails } from '@/lib/data/epa-2023-details'
 import { useEmissionsData } from '@/lib/hooks/useEmissionsData'
 import { useEpaStore } from '@/lib/store/useEpaStore'
 import { getTopFacilities } from '@/lib/data/selectors'
@@ -20,14 +21,44 @@ export default function FacilitiesPage() {
   const selectedFacility = useEpaStore((state) => state.selectedFacility)
   const setActiveYear = useEpaStore((state) => state.setActiveYear)
   const setSelectedFacility = useEpaStore((state) => state.setSelectedFacility)
-  const facilities = getTopFacilities(data, activeYear, 10)
+  const facilityRows =
+    activeYear === 2023
+      ? get2023FacilityDetails().map((facility) => ({
+          rank: facility.rank,
+          name: facility.name,
+          mt: facility.totalMt,
+          city: facility.city,
+          state: facility.state,
+          county: facility.county,
+          parentCompany: facility.parentCompany,
+        }))
+      : getTopFacilities(data, activeYear, 25).map((facility) => ({
+          rank: facility.rank,
+          name: facility.name,
+          mt: facility.mt,
+          city: null,
+          state: null,
+          county: null,
+          parentCompany: null,
+        }))
   const [search, setSearch] = useState('')
   const deferredSearch = useDeferredValue(search)
-  const filteredFacilities = facilities.filter((facility) =>
-    facility.name.toLowerCase().includes(deferredSearch.toLowerCase()),
+  const filteredFacilities = facilityRows.filter((facility) =>
+    [
+      facility.name,
+      facility.city,
+      facility.state,
+      facility.parentCompany,
+      facility.county,
+    ]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase()
+      .includes(deferredSearch.toLowerCase()),
   )
+  const visibleFacilities = filteredFacilities.slice(0, activeYear === 2023 ? 100 : 25)
   const selectedFacilityRow =
-    facilities.find((facility) => facility.name === selectedFacility) ?? filteredFacilities[0] ?? facilities[0]
+    facilityRows.find((facility) => facility.name === selectedFacility) ?? filteredFacilities[0] ?? facilityRows[0]
 
   return (
     <main className="px-6 py-12 pt-28">
@@ -62,7 +93,7 @@ export default function FacilitiesPage() {
               downloadCsv(
                 `verdeon-facilities-${activeYear}.csv`,
                 ['rank', 'facility', 'emissions_mt'],
-                facilities.map((facility) => [facility.rank, facility.name, facility.mt.toFixed(3)]),
+                facilityRows.map((facility) => [facility.rank, facility.name, facility.mt.toFixed(3)]),
               )
             }
           >
@@ -81,7 +112,7 @@ export default function FacilitiesPage() {
             <input
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              placeholder="Search top emitters in the selected year"
+              placeholder={activeYear === 2023 ? 'Search by facility, city, state, or company' : 'Search top emitters in the selected year'}
               className="w-full rounded-[16px] border border-green-200 bg-white px-4 py-3 text-sm text-green-900 outline-none focus:border-green-600"
             />
           </label>
@@ -99,13 +130,18 @@ export default function FacilitiesPage() {
               ? 'Selected facility in the current reporting year.'
               : 'Current facility ranking leader for the selected year.'}
           </p>
+          <p className="mt-2 text-xs text-green-300">
+            {activeYear === 2023
+              ? `${facilityRows.length.toLocaleString()} facilities loaded from the 2023 EPA workbook`
+              : 'Starter dataset slice for this year'}
+          </p>
           <div className="mt-6 font-display text-[2.2rem] tracking-[-0.03em] text-green-300">
             {selectedFacilityRow ? `${selectedFacilityRow.mt.toFixed(3)} Mt` : '0 Mt'}
           </div>
         </Card>
 
-        <FacilityTable
-          rows={filteredFacilities}
+          <FacilityTable
+          rows={visibleFacilities}
           activeFacility={selectedFacilityRow?.name}
           onSelectFacility={setSelectedFacility}
         />

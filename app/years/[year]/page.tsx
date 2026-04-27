@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { PageWrapper } from '@/components/layout/PageWrapper'
 import { Card } from '@/components/ui/Card'
 import { StatCard } from '@/components/ui/StatCard'
+import { get2023DetailsSummary, get2023FacilityDetails, get2023StateDetails } from '@/lib/data/epa-2023-details'
 import data from '@/lib/data/epa-data.json'
 import type { EpaDataset } from '@/lib/data/types'
 import { getSectorBreakdown, getStateRanking, getTopFacilities } from '@/lib/data/selectors'
@@ -38,14 +39,27 @@ export default async function YearPage({ params }: YearPageProps) {
   const { year } = await params
   const numericYear = Number(year)
   const yearData = DATASET.years[year]
+  const detailSummary = numericYear === 2023 ? get2023DetailsSummary() : null
 
   if (!yearData || Number.isNaN(numericYear)) {
     notFound()
   }
 
   const sectors = getSectorBreakdown(DATASET, numericYear).slice(0, 4)
-  const states = getStateRanking(DATASET, numericYear).slice(0, 5)
-  const facilities = getTopFacilities(DATASET, numericYear, 5)
+  const states =
+    numericYear === 2023
+      ? get2023StateDetails().slice(0, 5).map((state) => ({
+          state: state.state,
+          mt: state.totalMt,
+        }))
+      : getStateRanking(DATASET, numericYear).slice(0, 5)
+  const facilities =
+    numericYear === 2023
+      ? get2023FacilityDetails().slice(0, 5).map((facility) => ({
+          name: facility.name,
+          mt: facility.totalMt,
+        }))
+      : getTopFacilities(DATASET, numericYear, 5)
 
   return (
     <main className="px-6 py-12 pt-28">
@@ -61,9 +75,17 @@ export default async function YearPage({ params }: YearPageProps) {
         </div>
 
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-          <StatCard label="Reported total" value={formatMt(yearData.total_mt)} detail={`${numericYear} direct emitter total`} />
-          <StatCard label="Facilities" value={yearData.facilities.toLocaleString()} detail="Facilities visible in the starter dataset" />
-          <StatCard label="Top state" value={states[0]?.state ?? 'N/A'} detail={states[0] ? formatMt(states[0].mt) : 'No value'} />
+          <StatCard
+            label="Reported total"
+            value={formatMt(detailSummary?.totalMt ?? yearData.total_mt)}
+            detail={`${numericYear} direct emitter total`}
+          />
+          <StatCard
+            label="Facilities"
+            value={(detailSummary?.facilities.length ?? yearData.facilities).toLocaleString()}
+            detail={numericYear === 2023 ? 'Facilities loaded from the 2023 workbook' : 'Facilities visible in the bundled dataset'}
+          />
+          <StatCard label="Top jurisdiction" value={states[0]?.state ?? 'N/A'} detail={states[0] ? formatMt(states[0].mt) : 'No value'} />
           <StatCard label="Top facility" value={facilities[0]?.name ?? 'N/A'} detail={facilities[0] ? formatMt(facilities[0].mt) : 'No value'} />
         </div>
 
@@ -83,7 +105,7 @@ export default async function YearPage({ params }: YearPageProps) {
           </Card>
 
           <Card className="rounded-[24px] p-6 shadow-card">
-            <h2 className="text-lg font-semibold text-green-900">Top states</h2>
+            <h2 className="text-lg font-semibold text-green-900">Top jurisdictions</h2>
             <div className="mt-4 space-y-3">
               {states.map((state) => (
                 <div key={state.state} className="flex items-center justify-between gap-4">

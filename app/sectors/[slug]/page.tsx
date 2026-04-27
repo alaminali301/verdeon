@@ -78,7 +78,7 @@ export default async function SectorPage({ params }: SectorPageProps) {
           <StatCard label="Latest year" value="2023" detail={latest ? `${formatMt(latest.mt)} reported` : 'No value available'} />
           <StatCard label="Share of total" value={latest ? formatPct(latest.pct) : '0%'} detail="Portion of 2023 reported U.S. total" />
           <StatCard label="Since first visible year" value={formatPct(changePct)} detail={firstPoint ? `${formatMt(firstPoint.value)} in ${firstPoint.year}` : 'No baseline'} />
-          <StatCard label="Years visible" value={String(history.length)} detail="Years with non-zero sector totals in the starter dataset" />
+          <StatCard label="Years visible" value={String(history.length)} detail="Years with non-zero sector totals in the bundled EPA summary" />
         </div>
 
         <div className="mt-10 grid gap-6 lg:grid-cols-[.9fr_1.1fr]">
