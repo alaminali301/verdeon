@@ -146,10 +146,10 @@ export function StateDetailPageClient({ slug }: { slug: string }) {
           <Card className="mt-10 rounded-[24px] p-8 shadow-card">
             <p className="text-[0.75rem] font-semibold uppercase tracking-[0.1em] text-green-600">2023 record</p>
             <h2 className="mt-3 font-display text-[clamp(2rem,4vw,2.8rem)] tracking-[-0.03em] text-green-950">
-              {stateName} is available as a 2023 EPA workbook entry
+              {stateName} is available in the 2023 workbook snapshot used by this build
             </h2>
             <p className="mt-4 max-w-3xl text-sm leading-7 text-muted">
-              The full EPA workbook gives this jurisdiction a rank, facility count, and share of national emissions even when a multiyear trend is not bundled in the multi-year summary.
+              The bundled 2023 workbook snapshot gives this jurisdiction a rank, facility count, and share of national emissions even when a multiyear trend is not bundled in the multi-year summary.
             </p>
           </Card>
         ) : null}

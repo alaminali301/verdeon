@@ -68,7 +68,7 @@ export function Footer() {
               A cleaner interface for exploring U.S. EPA greenhouse gas reporting data by facility, state, sector, and year.
             </p>
             <div className="mt-4 inline-block rounded-sm border border-green-500/15 bg-green-500/8 px-3 py-2 text-[0.72rem] text-green-400">
-              Data source: EPA GHGRP Direct Emitters, 2010–2023.
+              Data source: bundled EPA GHGRP workbook snapshots used in this build.
             </div>
           </div>
 
@@ -96,7 +96,7 @@ export function Footer() {
         <div className="mt-10 flex flex-col gap-3 border-t border-white/6 pt-8 text-[0.76rem] text-white/40 md:flex-row md:items-center md:justify-between">
           <p>Verdeon helps people inspect EPA greenhouse gas reporting data without enterprise software.</p>
           <p>
-            EPA attribution: figures sourced from EPA GHGRP Direct Emitters datasets and derived Verdeon calculations. Verify important figures against the original EPA source and report corrections through the contact page.
+            EPA attribution: figures are derived from bundled EPA GHGRP workbook snapshots and Verdeon calculations. This is a derived visualization layer, not a live EPA feed. Verify important figures against the original EPA source and report corrections through the contact page.
           </p>
         </div>
       </PageWrapper>

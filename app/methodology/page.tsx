@@ -11,11 +11,18 @@ export default function MethodologyPage() {
             How Verdeon uses EPA emissions data
           </h1>
           <p className="mt-4 max-w-3xl text-base leading-7 text-muted">
-            Verdeon is a visualization layer over EPA greenhouse gas reporting data. It organizes national totals, sector mix, state rankings, and facility rankings into a cleaner interface, but it does not claim to replace the original EPA source.
+            Verdeon is a visualization layer over EPA greenhouse gas reporting data. It organizes national totals, sector mix, state rankings, and facility rankings into a cleaner interface, but it does not claim to replace the original EPA source. Verdeon is not affiliated with or endorsed by the EPA.
           </p>
         </div>
 
         <div className="grid gap-6">
+          <Card className="rounded-[24px] p-6 shadow-card">
+            <h2 className="text-lg font-semibold text-green-900">Snapshot note</h2>
+            <p className="mt-3 text-sm leading-7 text-muted">
+              This build uses bundled EPA GHGRP workbook snapshots stored with Verdeon. It is a derived dataset, not a live EPA feed. If a number differs from the current EPA website, the EPA source controls.
+            </p>
+          </Card>
+
           <Card className="rounded-[24px] p-6 shadow-card">
             <h2 className="text-lg font-semibold text-green-900">Primary source</h2>
             <p className="mt-3 text-sm leading-7 text-muted">
@@ -52,7 +59,7 @@ export default function MethodologyPage() {
           <Card className="rounded-[24px] p-6 shadow-card">
             <h2 className="text-lg font-semibold text-green-900">Why this page exists</h2>
             <p className="mt-3 text-sm leading-7 text-muted">
-              The goal is to keep the product credible. Verdeon is strongest when it clearly separates source data, derived calculations, and current limitations instead of presenting polished charts without context.
+              The goal is to keep the product credible. Verdeon is most useful when it clearly separates source data, derived calculations, and current limitations instead of presenting polished charts without context.
             </p>
           </Card>
         </div>

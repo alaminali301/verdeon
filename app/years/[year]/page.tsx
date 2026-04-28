@@ -70,7 +70,7 @@ export default async function YearPage({ params }: YearPageProps) {
             EPA emissions in {numericYear}
           </h1>
           <p className="mt-4 max-w-3xl text-base leading-7 text-muted">
-            Use this page as a single-year view of the EPA dataset, with quick access to the strongest sector, state, and facility signals in {numericYear}.
+            Use this page as a single-year view of the EPA dataset, with quick access to the leading sector, state, and facility signals in {numericYear}.
           </p>
         </div>
 
@@ -83,7 +83,7 @@ export default async function YearPage({ params }: YearPageProps) {
           <StatCard
             label="Facilities"
             value={(detailSummary?.facilities.length ?? yearData.facilities).toLocaleString()}
-            detail={numericYear === 2023 ? 'Facilities loaded from the 2023 workbook' : 'Facilities visible in the bundled dataset'}
+            detail={numericYear === 2023 ? 'Facilities loaded from the 2023 workbook snapshot' : 'Facilities visible in the bundled dataset'}
           />
           <StatCard label="Top jurisdiction" value={states[0]?.state ?? 'N/A'} detail={states[0] ? formatMt(states[0].mt) : 'No value'} />
           <StatCard label="Top facility" value={facilities[0]?.name ?? 'N/A'} detail={facilities[0] ? formatMt(facilities[0].mt) : 'No value'} />

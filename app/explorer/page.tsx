@@ -97,7 +97,7 @@ export default function ExplorerPage() {
 
         <div className="mb-6 rounded-[18px] border border-green-100 bg-white/90 p-4 text-sm leading-7 text-muted shadow-card">
           {activeYear === 2023
-            ? '2023 is now backed by the full EPA workbook extract: 54 reporting jurisdictions, 6,470 direct emitters, and 2,294 parent companies.'
+            ? '2023 in this build uses the bundled EPA workbook snapshot: 54 reporting jurisdictions, 6,470 direct emitters, and 2,294 parent companies.'
             : 'Bundled EPA summary scope: 15 states, 10 facilities, and 8 sectors per reporting year. Upload a workbook if you want a wider slice of data.'}
         </div>
 
@@ -187,7 +187,7 @@ export default function ExplorerPage() {
                 <h2 className="text-lg font-semibold text-green-900">Top jurisdictions</h2>
                 <p className="mt-1 text-sm text-muted">
                   {activeYear === 2023
-                    ? 'The 2023 workbook extract includes all 54 reporting jurisdictions.'
+                    ? 'The bundled 2023 workbook snapshot includes all 54 reporting jurisdictions in this build.'
                     : 'The bundled EPA summary includes the top 15 state totals per year.'}
                 </p>
               </div>

@@ -119,7 +119,7 @@ const FAQS: FaqItem[] = [
   {
     question: 'Can I export charts and reports?',
     answer:
-      'You can export filtered views from the app. In this starter build, exports focus on data snapshots rather than polished reporting packages.',
+      'You can export filtered views from the app. In this build, exports focus on data snapshots rather than polished reporting packages.',
   },
   {
     question: 'Is there an API for our own tools?',

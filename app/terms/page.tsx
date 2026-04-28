@@ -44,7 +44,7 @@ export default function TermsPage() {
           <Card className="rounded-[24px] p-6 shadow-card">
             <h2 className="text-lg font-semibold text-green-900">No warranties and no advice</h2>
             <p className="mt-3 text-sm leading-7 text-muted">
-              Verdeon is not an official EPA service and does not provide legal, regulatory, compliance, accounting, or professional advice. The service is provided as-is without warranties.
+              Verdeon is not an official EPA service and is not affiliated with, endorsed by, or approved by the EPA. It does not provide legal, regulatory, compliance, accounting, or professional advice. The service is provided as-is without warranties.
             </p>
           </Card>
 
@@ -52,6 +52,13 @@ export default function TermsPage() {
             <h2 className="text-lg font-semibold text-green-900">Limitation of liability</h2>
             <p className="mt-3 text-sm leading-7 text-muted">
               Verdeon shall not be liable for damages or losses resulting from use of the service, to the fullest extent permitted by law.
+            </p>
+          </Card>
+
+          <Card className="rounded-[24px] p-6 shadow-card">
+            <h2 className="text-lg font-semibold text-green-900">Third-party sources</h2>
+            <p className="mt-3 text-sm leading-7 text-muted">
+              EPA data and external links are provided for convenience only. Verdeon does not control third-party sites or sources, and the original EPA source should control if a discrepancy appears.
             </p>
           </Card>
 
